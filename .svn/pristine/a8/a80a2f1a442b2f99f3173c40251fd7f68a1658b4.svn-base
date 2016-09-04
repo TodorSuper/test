@@ -1,0 +1,265 @@
+<?php
+
+/**
+ * +---------------------------------------------------------------------
+ * | www.yunputong.com 粮人网
+ * +---------------------------------------------------------------------
+ * | Copyright (c) 2015 http://www.yunputong.com  All rights reserved.
+ * +---------------------------------------------------------------------
+ * | Author: zhoulianlei <zhoulianlei@yunputong.com >
+ * +---------------------------------------------------------------------
+ * | 用户相关模块
+ */
+
+namespace Bll\B2b\User;
+use System\Base;
+
+class User extends Base {
+
+    private $_rule = null; # 验证规则列表
+    private static $uc_prefix = null;
+    public function __construct() {
+        parent::__construct();
+        self::$uc_prefix = 'Uc';
+    }
+    
+	/**
+	 * 获取openId的置换code
+	 * Bll.B2b.User.User.getCode
+	 * @param mixed $data 
+	 * @access public
+	 * @return void
+	 */
+	public function getCode($data){
+		$call = $this->invoke('Com.Common.Wx.Mutual.getCode', $data);
+		if($call['status'] !== 0) {
+			 return $this->res('', $call['status']); # 调用失败
+		}
+        return $this->res($call['response']);        
+	}
+
+	/**
+	 * 根据置换code获取openId
+	 * getOpenId 
+	 * Bll.B2b.User.User.getOpenId
+	 * @param mixed $data 
+	 * @access public
+	 * @return void
+	 */
+	public function getOpenId($data) {
+		$call = $this->invoke('Com.Common.Wx.Mutual.getOpenId', $data);
+		if($call['status'] !== 0) {
+			return $this->res('', $call['status']); # 调用失败
+		}
+		return $this->res($call['response']);
+	}
+
+	/**
+	 * 实现b2b用户自动登录的接口
+	 * Bll.B2b.User.User.autoLogin
+	 * @access public
+	 * @return void
+	 */
+	public function autoLogin($data) {		
+		$this->_rule = array(
+			array('openid', 'require' , PARAMS_ERROR, ISSET_CHECK ),  # 要登陆到的系统		非必需 (不传入的话默认取调用系统名称的值)
+		);
+
+		if(!$this->checkInput($this->_rule, $data)) # 自动校验
+			return $this->res($this->getErrorField(),$this->getCheckError());
+
+		# 通过openid获取用户登录账户名称
+		$weixinInfo = $this->invoke('Base.UserModule.User.User.getUserInfoByOpenid', ['openid'=>$data['openid']]); 
+		if($weixinInfo['status'] !== 0 || !$weixinInfo['response']['username']) {
+			return $this->res('', 6907); # 用户未在微信端注册
+		}
+
+		$loginData =array(  
+			'sysName' => B2B,
+			'username' => $weixinInfo['response']['username'],
+		);
+
+		# 调用登录接口
+		$call = $this->invoke('Base.UserModule.User.User.login', $loginData); # 登录
+		if($call['status'] !== 0) {
+			return $this->res('', $call['status']);							  # 调用失败
+		}
+
+        //得到小B用户的邀请码
+        $arr=array(
+            'uc_code'=>$call['response']['uc_code'],
+        );
+        $result=$this->invoke('Base.UserModule.User.User.getInviteCode',$arr);
+        if($result['status']!==0){
+            return $this->endInvoke('',$result['status']);
+        }
+        $invite_code=$result['response'][0]['invite_code'];
+
+        //根据邀请码得到sc_code
+        $param=array(
+            'invite_code'=>$invite_code,
+        );
+        $respon=$this->invoke('Base.UserModule.Customer.Salesman.get',$param);
+        if($respon['status']!==0){
+            return $this->endInvoke('',$respon['status']);
+        }
+		# 载入配置好的sc_code, 余氏的店铺编码
+		$sc_code = $respon['response']['sc_code'];  # todo 商户可选的情况下要修改此行代码!目前直接写到配置当中
+		$call['response']['sc_code'] = $sc_code;
+		return $this->res($call['response']);
+	}
+
+
+
+	/**
+	 * B2B个人中心
+ 	 * Bll.B2b.User.User.userCenter
+ 	 * @author Todor
+ 	 * @access public
+	 */
+
+	public function userCenter($params){
+		//获取 待付款数量 
+		$params['sys_name'] = B2B;
+		$params['type'] = OC_ORDER_GROUP_STATUS_UNPAY;
+		$apiPath = "Base.StoreModule.Order.Operation.check";
+		$unpay_res = $this->invoke($apiPath,$params);
+		if($unpay_res['status']!==0){
+            return $this->endInvoke('',$unpay_res['status']);
+        }
+        $params['start_time'] = $unpay_res['response'];
+        $apiPath = "Base.OrderModule.B2b.Statistic.bubble";
+        $unpay_num = $this->invoke($apiPath,$params);
+       	if($unpay_num['status']!==0){
+            return $this->endInvoke('',$unpay_num['status']);
+        }
+
+        //获取 账期待款数量 
+		$params['sys_name'] = B2B;
+		$params['type'] = "TERM_UNPAY";
+		$apiPath = "Base.StoreModule.Order.Operation.check";
+		$term_unpay_res = $this->invoke($apiPath,$params);
+		if($term_unpay_res['status']!==0){
+            return $this->endInvoke('',$term_unpay_res['status']);
+        }
+        $params['start_time'] = $term_unpay_res['response'];
+        $apiPath = "Base.OrderModule.B2b.Statistic.bubble";
+        $term_unpay_num = $this->invoke($apiPath,$params);
+       	if($term_unpay_num['status']!==0){
+            return $this->endInvoke('',$term_unpay_num['status']);
+        }
+
+
+        //获取 待发货数量 
+		$params['sys_name'] = B2B;
+		$params['type'] = OC_ORDER_GROUP_STATUS_UNSHIP;
+		$apiPath = "Base.StoreModule.Order.Operation.check";
+		$unship_res = $this->invoke($apiPath,$params);
+		if($unship_res['status']!==0){
+            return $this->endInvoke('',$unship_res['status']);
+        }
+        $params['start_time'] = $unship_res['response'];
+        $apiPath = "Base.OrderModule.B2b.Statistic.bubble";
+        $unship_num = $this->invoke($apiPath,$params);
+       	if($unship_num['status']!==0){
+            return $this->endInvoke('',$unship_num['status']);
+        }
+
+        //获取 已发货数量
+		$params['sys_name'] = B2B;
+		$params['type'] = OC_ORDER_GROUP_STATUS_SHIPPED;
+		$apiPath = "Base.StoreModule.Order.Operation.check";
+		$shiped_res = $this->invoke($apiPath,$params);
+		if($shiped_res['status']!==0){
+            return $this->endInvoke('',$shiped_res['status']);
+        }
+        $params['start_time'] = $shiped_res['response'];
+        $apiPath = "Base.OrderModule.B2b.Statistic.bubble";
+        $shiped_num = $this->invoke($apiPath,$params);
+       	if($shiped_num['status']!==0){
+            return $this->endInvoke('',$shiped_num['status']);
+        }
+
+        //获取 已完成数量 
+		$params['sys_name'] = B2B;
+		$params['type'] = OC_ORDER_GROUP_STATUS_COMPLETE;
+		$apiPath = "Base.StoreModule.Order.Operation.check";
+		$complete_res = $this->invoke($apiPath,$params);
+		if($complete_res['status']!==0){
+            return $this->endInvoke('',$complete_res['status']);
+        }
+        $params['start_time'] = $complete_res['response'];
+        $apiPath = "Base.OrderModule.B2b.Statistic.bubble";
+        $complete_num = $this->invoke($apiPath,$params);
+       	if($complete_num['status']!==0){
+            return $this->endInvoke('',$complete_num['status']);
+        }
+
+
+        // 获取 客户信息
+        $apiPath = "Base.UserModule.Customer.Customer.get";
+        $user_res = $this->invoke($apiPath,$params);
+       	if($user_res['status']!==0){
+            return $this->endInvoke('',$user_res['status']);
+        }
+
+        $res = array(
+        	'unpay'=>$unpay_num['response'][0]['num'],
+        	'term_unpay'=>$term_unpay_num['response'][0]['num'],
+        	'unship'=>$unship_num['response'][0]['num'],
+        	'shiped'=>$shiped_num['response'][0]['num'],
+        	'complete'=>$complete_num['response'][0]['num'],
+        	'name'=>$user_res['response']['name'],
+        	'mobile'=>$user_res['response']['mobile'],
+        	'tel'=>C('CALL_NUMBER'),
+        	);
+        return $this->endInvoke($res);
+	}
+
+
+	/**
+	 * B2B个人中心 查看
+ 	 * Bll.B2b.User.User.look
+ 	 * @author Todor
+ 	 * @access public
+	 */
+
+	public function look($params){
+		try{
+            D()->startTrans();
+           	$params['sys_name'] = B2B;
+			$params['type'] = strtoupper($params['type']);
+			$apiPath = "Base.StoreModule.Order.Operation.update";
+			$res = $this->invoke($apiPath,$params);
+			if($res['status'] != 0){
+				return $this->endInvoke(NULL,$res['status']);
+			}
+            $commit_res = D()->commit();
+            if($commit_res === FALSE){
+                return $this->endInvoke(NULL,17);
+            }
+            return $this->endInvoke($res['response']);
+        } catch (\Exception $ex) {
+            D()->rollback();
+            return $this->endInvoke(NULL,6058);
+        }
+	}
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

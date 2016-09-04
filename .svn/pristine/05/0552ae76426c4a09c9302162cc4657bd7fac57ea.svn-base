@@ -1,0 +1,105 @@
+<?php 
+
+/**
+ * +---------------------------------------------------------------------
+ * | www.yunputong.com 云铺通
+ * +---------------------------------------------------------------------
+ * | Copyright (c) 2015 http://www.yunputong.com  All rights reserved.
+ * +---------------------------------------------------------------------
+ * | Author: zhoulianlei <zhoulianlei@yunputong.com >
+ * +---------------------------------------------------------------------
+ * | b2b订单相关测试模块
+ */
+
+namespace Test\Bll\Boss;
+
+use System\Base;
+class OrderInfo extends Base {
+
+	/**
+	 * Test.Bll.Boss.OrderInfo.testCashier
+	 * @access public
+	 * @return void
+	 */
+	public function testCashier($data) {
+		$data = array(
+			'oc_code' => '12200004',
+			'op_code' => '12200004',
+			'total_fee' => 0.01,
+			'getway' => WEIXIN_JSAPI_PAY,
+			'open_id' => 'oOqT0twu_GGLijOSQunBRsrwnSB8',
+		);
+		$res = $this->invoke("Base.TradeModule.Pay.Task.createPayTask", $data);
+		L($res);
+		return $this->endInvoke($res);
+	}
+	/*
+    * APP订单列表接口
+    * Test.Bll.Boss.OrderInfo.lists
+    */
+    public function lists() {
+    	$params = array(
+    		'sc_code' => '1010000000077',
+    		'status'  => 'UNSHIP',
+    		'sort'   => CREATE_TIME_DESC
+    	);
+    	$res = $this->invoke('Bll.Boss.Order.OrderInfo.lists',$params);
+    	return $this->endInvoke($res);
+    }
+    /*
+    * Test.Bll.Boss.OrderInfo.operator
+    * APP订单状态操作接口
+    */
+    public function operator() {
+    	$params = array(
+    		'sc_code' => '1020000000026',
+    		'b2b_code'=> '12200003608',
+    		'status'  => 'SHIPPED',
+    		'sender'  => '张三',
+    		'sender_mobile' => '18911900442'
+    	
+    	);
+    	$res = $this->invoke('Bll.Boss.Order.OrderInfo.operator',$params);
+    	return $this->endInvoke($res);
+    }
+     /*
+    * Test.Bll.Boss.OrderInfo.get
+    * APP订单详情
+    */
+    public function get($params) {
+    	$params = array(
+    		'sc_code' => '1010000000077',
+    		'b2b_code' => '12100002378'
+    	);
+    	$data = $this->invoke('Bll.Boss.Order.OrderInfo.get',$params);
+    	return $this->res($data);
+    	return $this->endInvoke($data);
+    }
+     /*
+    * Test.Bll.Boss.OrderInfo.accountSearch
+    * 账期列表
+    */
+    public function accountSearch($params) {
+    	$params = array(
+    		'sc_code' => '1010000000077',
+    		'pageSize' => 1,
+    		'pageNumber' =>20,
+    	);
+    	$data = $this->invoke('Bll.Boss.Order.OrderInfo.accountSearch',$params);
+    	return $this->endInvoke($data);
+    }	
+    /*
+    * 账期详情
+    * Test.Bll.Boss.OrderInfo.accountInfo
+    */
+    public function accountInfo($params) {
+    	$params = array(
+    		'uc_code' => '1210000000427',
+    		'pageNumber' => 1,
+    		'pageSize' => 2,
+    	);
+    	$data = $this->invoke('Bll.Boss.Order.OrderInfo.accountInfo',$params);
+    	return $this->endInvoke($data);
+    }	
+    
+}

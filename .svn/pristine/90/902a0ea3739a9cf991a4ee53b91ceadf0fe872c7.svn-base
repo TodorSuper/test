@@ -1,0 +1,216 @@
+<?php
+
+/**
+ * +---------------------------------------------------------------------
+ * | www.yunputong.com 粮人网
+ * +---------------------------------------------------------------------
+ * | Copyright (c) 2015 http://www.yunputong.com  All rights reserved.
+ * +---------------------------------------------------------------------
+ * | Author: zhoulianlei <zhoulianlei@yunputong.com >
+ * +---------------------------------------------------------------------
+ * | 基础用户信息相关模块
+ */
+
+namespace Base\UserModule\User;
+
+use System\Base;
+
+class App extends Base {
+
+    private $_rule = null; # 验证规则列表
+    private static $uc_prefix = null;
+
+    public function __construct() {
+        parent::__construct();
+    }
+
+
+    /**
+     * @api  Boss查看用户设置
+     * @apiVersion 1.0.1
+     * @apiName Base.UserModule.User.App.getVersion
+     * @apiTransaction N
+     * @apiAuthor Todor <tudou@liangrenwang.com>
+     * @apiDate 2015-10-21
+     * @apiSampleRequest On
+     */
+
+    public function getVersion($params){
+        $this->_rule = array(
+            array('uc_code', 'require', PARAMS_ERROR, ISSET_CHECK),
+            array('sc_code', 'require', PARAMS_ERROR, ISSET_CHECK),
+            array('device', 'require', PARAMS_ERROR, ISSET_CHECK),
+            array('type', 'require', PARAMS_ERROR, ISSET_CHECK),
+            array('id', 'require', PARAMS_ERROR, ISSET_CHECK),
+        );
+        if (!$this->checkInput($this->_rule, $params)) { 
+            return $this->res($this->getErrorField(), $this->getCheckError());
+        }
+        // 如果为空则获取 装置类型
+        if(empty($params['device']) && empty($params['id']) ){
+            $apiPath = "Base.UserModule.User.User.getDevice";
+            $device  = $this->invoke($apiPath,$params);
+            if($device['status'] != 0){
+                return $this->res(NULL,$device['status'],'',$device['message']);
+            }
+            $params['device'] = $device['response']['device'];
+        }
+
+        !empty($params['device']) && $where['device'] = $params['device'];
+        !empty($params['id'])     && $where['id']     = $params['id'];
+        empty($params['type']) ? $where['type'] = VERSION : $where['type'] = $params['type'];
+        $where['status'] = "ENABLE";
+
+        $version = D('AppVersion')->where($where)->order('id desc')->find();
+        
+        return $this->res($version);
+    }
+
+
+    /**
+     * @api  CMS获取版本列表
+     * @apiVersion 1.0.1
+     * @apiName Base.UserModule.User.App.lists
+     * @apiTransaction N
+     * @apiAuthor Todor <tudou@liangrenwang.com>
+     * @apiDate 2015-12-3
+     * @apiSampleRequest On
+     */
+
+
+    public function lists($params){
+        $this->_rule = array(
+            array('version', 'require', PARAMS_ERROR, ISSET_CHECK),       # 版本号
+            array('device', 'require', PARAMS_ERROR, ISSET_CHECK),        # 设备
+            array('update_type', 'require', PARAMS_ERROR, ISSET_CHECK),   # 更新类型
+            array('start_time', 'require', PARAMS_ERROR, ISSET_CHECK),    # 开始时间
+            array('end_time', 'require', PARAMS_ERROR, ISSET_CHECK),      # 结束时间
+            array('version_order','require', PARAMS_ERROR, ISSET_CHECK),  # 排序
+            array('type','require', PARAMS_ERROR, ISSET_CHECK),           # 类型
+        );
+
+        if (!$this->checkInput($this->_rule, $params)) { 
+            return $this->res($this->getErrorField(), $this->getCheckError());
+        }
+
+        // where 条件拼接
+        !empty($params['version']) && $where['version'] = array('like',"%".$params['version']."%");
+        !empty($params['device']) && $where['device'] = $params['device'];
+        !empty($params['update_type']) && $where['update_type'] = $params['update_type'];
+        !empty($params['start_time']) && empty($params['end_time']) && $where['create_time'] = array('gt',$params['start_time']);
+        !empty($params['end_time']) && empty($params['start_time']) && $where['create_time'] = array('lt',$params['end_time']);
+        !empty($params['end_time']) && !empty($params['start_time']) && $where['create_time'] = array('between',array($params['start_time'],$params['end_time']));
+        !empty($params['type']) && $where['type'] = $params['type'];
+        $order = empty($params['version_order']) ? 'id desc' : $version_order;
+
+        $fields = "id,type,version,update_type,down_url,show_img,device,content,show_update,clear_cache,status,create_time";
+        $params['fields'] = $fields;
+        $params['order'] = $order;
+        $params['where'] = $where;
+        $params['center_flag'] = SQL_APP;
+        $params['sql_flag'] = 'app_list';
+
+        $apiPath = "Com.Common.CommonView.Lists.Lists";
+        $list_res = $this->invoke($apiPath, $params);   
+
+        if ($list_res['status'] != 0) {
+            return $this->res(NULL, $list_res['status']);
+        }
+        return $this->res($list_res['response']);
+
+    }
+
+
+    /**
+     * @api  CMS添加版本信息
+     * @apiVersion 1.0.1
+     * @apiName Base.UserModule.User.App.add
+     * @apiTransaction N
+     * @apiAuthor Todor <tudou@liangrenwang.com>
+     * @apiDate 2015-12-3
+     * @apiSampleRequest On
+     */
+
+    public function add($params){
+
+        $this->_rule = array(
+            array('version', 'require', PARAMS_ERROR, MUST_CHECK),     # 版本号
+            array('down_url', 'require', PARAMS_ERROR, MUST_CHECK),    # 下载地址
+            array('type', 'require', PARAMS_ERROR, ISSET_CHECK),       # 类型
+            array('update_type', 'require', PARAMS_ERROR, ISSET_CHECK),# 更新类型
+            array('device', 'require', PARAMS_ERROR, MUST_CHECK),      # 设备类型
+            array('show_update','require', PARAMS_ERROR, ISSET_CHECK), # 是否展示更新
+            array('clear_cache','require', PARAMS_ERROR, ISSET_CHECK), # 是否清除缓存
+            array('content','require', PARAMS_ERROR, MUST_CHECK),      # 更新内容
+        );
+        if (!$this->checkInput($this->_rule, $params)) { 
+            return $this->res($this->getErrorField(), $this->getCheckError());
+        }
+
+        $data = array(
+            'version'=>$params['version'],
+            'down_url'=>$params['down_url'],
+            'type'=>$params['type'],
+            'update_type'=>$params['update_type'],
+            'device'=>$params['device'],
+            'show_update'=>$params['show_update'],
+            'clear_cache'=>$params['clear_cache'],
+            'content'=>$params['content'],
+            'create_time'=>NOW_TIME,
+            'update_time'=>NOW_TIME,
+            'status'=>'ENABLE',
+            );
+        $data = D('AppVersion')->add($data);
+        if($data = FALSE){
+            return $this->res(NULL,5021);
+        }
+        return $this->res($data);
+    }
+
+
+    /**
+     * @api  CMS编辑版本信息
+     * @apiVersion 1.0.1
+     * @apiName Base.UserModule.User.App.edit
+     * @apiTransaction N
+     * @apiAuthor Todor <tudou@liangrenwang.com>
+     * @apiDate 2015-12-3
+     * @apiSampleRequest On
+     */
+
+    public function edit($params){
+
+        $this->_rule = array(
+            array('id', 'require', PARAMS_ERROR, MUST_CHECK),
+            array('version', 'require', PARAMS_ERROR, MUST_CHECK),      # 版本号
+            array('down_url', 'require', PARAMS_ERROR, MUST_CHECK),     # 下载地址
+            array('update_type', 'require', PARAMS_ERROR, ISSET_CHECK), # 更新类型
+            array('device', 'require', PARAMS_ERROR, MUST_CHECK),       # 设备类型
+            array('show_update','require', PARAMS_ERROR, ISSET_CHECK),  # 是否展示更新
+            array('clear_cache','require', PARAMS_ERROR, ISSET_CHECK),  # 是否清除缓存
+            array('content','require', PARAMS_ERROR, ISSET_CHECK),      # 更新内容    
+        );
+        if (!$this->checkInput($this->_rule, $params)) { 
+            return $this->res($this->getErrorField(), $this->getCheckError());
+        }
+
+        $data = array(
+            'version'=>$params['version'],
+            'down_url'=>$params['down_url'],
+            'update_type'=>isset($params['update_type']) ? $params['update_type'] : '',
+            'device'=>$params['device'],
+            'show_update'=>isset($params['show_update']) ? $params['show_update'] : '',
+            'clear_cache'=>isset($params['clear_cache']) ? $params['clear_cache'] : '',
+            'content'=>isset($params['content']) ? $params['content'] : '',
+            'update_time'=>NOW_TIME,
+            );
+        $res = D('AppVersion')->where(array('id'=>$params['id']))->save($data);
+        if($res == FALSE){
+            return $this->res(NULL,5022);
+        }
+        return $this->res($res);
+    }
+
+}
+
+?>

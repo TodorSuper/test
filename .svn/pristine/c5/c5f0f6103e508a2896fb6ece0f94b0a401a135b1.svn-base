@@ -1,0 +1,162 @@
+<?php
+
+/**
+ * +---------------------------------------------------------------------
+ * | www.yunputong.com 粮人网
+ * +---------------------------------------------------------------------
+ * | Copyright (c) 2015 http://www.yunputong.com  All rights reserved.
+ * +---------------------------------------------------------------------
+ * | Author: zhoulianlei <zhoulianlei@yunputong.com >
+ * +---------------------------------------------------------------------
+ * | 店铺用户相关
+ */
+
+namespace Base\StoreModule\Basic;
+
+use System\Base;
+
+class Store extends Base {
+
+    private $_rule = null; # 验证规则列表
+    private static $uc_prefix = null;
+
+    public function __construct() {
+        parent::__construct();
+    }
+
+    /**
+     * 添加店铺
+     * Base.StoreModule.Basic.Store.add
+     * @return integer   成功时返回  自增id
+	 */
+
+	public function add($params) {
+
+		$this->startOutsideTrans();
+		$this->_rule = array(
+			array('data', 'checkArrayInput', PARAMS_ERROR, MUST_CHECK, 'function'),			# 写入数据  * 必须字段
+			array('uc_code', 'require', PARAMS_ERROR, MUST_CHECK),		# 用户编码  * 必须字段
+            array('pre_bus_type', 'require', PARAMS_ERROR, MUST_CHECK), # 商户类型  * 必须字段  参考常量表
+		);
+
+		if (!$this->checkInput($this->_rule, $params)) { # 自动校验
+			return $this->res($this->getErrorField(), $this->getCheckError());
+		}
+		
+		# 生成店铺编码
+		$apiPath = "Com.Tool.Code.CodeGenerate.mkCode";
+		$data = array(
+			'busType'=> POP_CODE,
+			'preBusType'=>$params['pre_bus_type'],
+			'codeType'=> SEQUENCE_POP,
+		);
+
+		$code_res = $this->invoke($apiPath, $data);
+		if($code_res['status'] !== 0 ) {
+			return $this->res('', $code_res['status']);
+		}
+		$params['data']['sc_code'] = $code_res['response'];
+		$params['data']['uc_code'] = $params['uc_code'];
+		$params['data']['create_time'] = NOW_TIME;
+		$params['data']['update_time'] = NOW_TIME;
+
+		# 插入店铺数据
+		$insert = D('ScStore')->add($params['data']);
+		if($insert <= 0 ) {
+			return $this->res('', 5506);
+		}
+
+		return $this->res($code_res['response']); # 返回店铺编码
+	}
+
+	/**
+	 * 修改店铺信息
+	 * update
+	 * Base.StoreModule.Basic.Store.update
+	 * @param mixed $data 
+	 * @access public
+	 * @return void
+	 */
+
+	public function update($data) {
+                $this->startOutsideTrans();
+		$this->_rule = array(
+			array('data', 'checkArrayInput', PARAMS_ERROR, MUST_CHECK, 'function'),			# 写入数据  * 必须字段
+			array('uc_code', 'require', PARAMS_ERROR, MUST_CHECK),							# 用户编码  * 必须字段
+		);
+
+		if (!$this->checkInput($this->_rule, $data)) { # 自动校验
+			return $this->res($this->getErrorField(), $this->getCheckError());
+		}
+		$where = ['uc_code' => $data['uc_code']];
+		$find = D('ScStore')->field('merchant_id')->where($where)->find();
+		if( !$find ) {
+			return $this->res('', 5508); # 用户不存在
+		}
+
+		$save = D('ScStore')->where($where)->save($data['data']);
+		if($save === false) {
+			return $this->res('', 5509); # 修改失败
+		}
+
+		return $this->res(['merchant_id'=>$find['merchant_id']]); # ok
+
+	}
+        
+    /**
+	 * 获取店铺信息
+	 * Base.StoreModule.Basic.Store.get
+	 * @param string sc_code
+	 * @access public
+	 * @return void
+	 */
+        public function get($params){
+               $this->_rule = array(
+			array('sc_code', 'require', PARAMS_ERROR, ISSET_CHECK),							# 店铺编码  * 必须字段
+			array('uc_code', 'require', PARAMS_ERROR, ISSET_CHECK),							# 用户编码
+                        array('detail', array('YES','NO'), PARAMS_ERROR, ISSET_CHECK,'in'),							# 是否需要更详细的信息
+		);
+
+		if (!$this->checkInput($this->_rule, $params)) { # 自动校验
+			return $this->res($this->getErrorField(), $this->getCheckError());
+		}
+                $sc_code  =  $params['sc_code'];
+                $uc_code = $params['uc_code'];
+                $detail = $params['detail'];
+                $where = array();
+                !empty($sc_code) && $where['sc_code'] = $sc_code;
+                !empty($uc_code) && $where['uc_code'] = $uc_code;
+                $sc_info  =  D('ScStore')->where($where)->find();
+                
+                if(empty($sc_info)){
+                    return $this->res(NULL,4027);
+                }
+                if($detail == 'YES'){
+                    $merchant_info = D('UcMerchant')->field('short_name,salesman')->where(array('id'=>$sc_info['merchant_id']))->find();
+                    if(!empty($merchant_info)){
+                        $sc_info = array_merge($sc_info,$merchant_info);
+                    }
+                }
+                return $this->res($sc_info);
+        }
+        
+        /**
+         * Base.StoreModule.Basic.Store.lists
+         * @param type $params
+         * @return type
+         */
+        
+        public function lists($params){
+//            $this->_rule = array(
+//		array('sc_code', 'require', PARAMS_ERROR, MUST_CHECK),							# 店铺编码  * 必须字段
+//	      );
+//            if (!$this->checkInput($this->_rule, $params)) { # 自动校验
+//			return $this->res($this->getErrorField(), $this->getCheckError());
+//            }
+            $res = D('ScStore')->field('sc_code,name')->where(array('status'=>'ENABLE'))->select();
+            return $this->res($res);
+        }
+
+
+}
+?>

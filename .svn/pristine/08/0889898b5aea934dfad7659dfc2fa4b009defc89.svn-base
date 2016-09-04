@@ -1,0 +1,74 @@
+<?php
+/**
+ * +---------------------------------------------------------------------
+ * | www.yunputong.com 粮人网
+ * +---------------------------------------------------------------------
+ * | Copyright (c) 2015 http://www.yunputong.com  All rights reserved.
+ * +---------------------------------------------------------------------
+ * | Author: hp-wangguangjian <wangguangjian@yunputong.com >
+ * +---------------------------------------------------------------------
+ * | 商品相关模块
+ */
+namespace Base\FcModule\Payment;
+
+use System\Base;
+
+class Account extends Base{
+    public function __construct() {
+        parent::__construct();
+    }
+
+    /**
+     * Base.FcModule.Payment.Account.allAccount
+     * 财务对账查询财务所有订单数据数据
+     * 接收数据
+     * array $where 查询条件
+     * array $field 限制条件
+     * int   $page  当前页面
+     * int   $page_number 查询的条数
+     */
+
+    public function allAccount(){
+        $this->_rule = array(
+            array('sc_code', 'require', PARAMS_ERROR, ISSET_CHECK),          //  店铺编码
+            array('oc_code', 'require', PARAMS_ERROR, ISSET_CHECK),          //  订单支付编码
+            array('bank_code', 'require', PARAMS_ERROR, ISSET_CHECK),          //  支付流水号(入金)
+            array('pay_method', 'require', PARAMS_ERROR, ISSET_CHECK),       //  支付方式
+            array('pay_status', 'require', PARAMS_ERROR, ISSET_CHECK),       //  支付状态
+            array('start_time', 'require', PARAMS_ERROR, ISSET_CHECK),       //  开始时间			非必须参数, 默认值 所有
+            array('end_time', 'require', PARAMS_ERROR, ISSET_CHECK),         //  结束时间			非必须参数, 默认值 所有
+            array('oc_type', 'require', PARAMS_ERROR, ISSET_CHECK),             //  交易类型			非必须参数, 默认值 所有
+            array('page', 'require', PARAMS_ERROR, ISSET_CHECK),             //  页码数			非必须参数, 默认值 所有
+            array('page_number', 'require', PARAMS_ERROR, ISSET_CHECK),      //  每页显示的数量			非必须参数, 默认值 所有
+        );
+        // 自动校验
+        if (!$this->checkInput($this->_rule, $params)) {
+            return $this->res($this->getErrorField(), $this->getCheckError());
+        }
+        //组装查询条件
+
+        $page = isset($params['page']) ? $params['page'] : 1;
+        $pageNumber = isset($params['page_number']) ? $params['page_number'] : 20;
+
+        # 时间区间确定
+        ( $params['start_time'] && $params['end_time'] ) ? $orderWhere['b2b.pay_time'] = array('BETWEEN', [$params['start_time'], $params['end_time'] ]) : null;
+        ( $params['start_time'] && $params['end_time'] ) ? $orderWhere['adv.pay_time'] = array('BETWEEN', [$params['start_time'], $params['end_time'] ]) : null;
+        //组装sql语句
+        //先查询订单表(b2b_order)的相关数据,预付款订单(oc_advance)的数据,订单扩展表(extend),财务确定单表(confirm)
+        $fileConfirm = 'store.name as sc_name,
+                        b2b.b2b_code,b2b.pay_time,b2b.op_code,b2b.order_status,b2b.pay_status,b2b.pay_method,b2b.ext1,b2b.amount,
+                        extend.remit_code,
+                        adv.adv_code,adv.amount as adv_amount,adv.pay_time,adv.pay_method as adv_pay_method,adv.pay_method_ext1,adv.status,adv.remit_code,
+                        confirm.oc_type,confirm.bank_code,confirm.balance_status,confirm.account_status,confirm.third_status';
+        $apiPath = "Com.Common.CommonView.Lists.Lists";
+        $orderParams['center_flag'] = SQL_FC;
+        $orderParams['sql_flag'] = 'getAccountAllInfo';
+        $orderParams['where'] = $orderWhere;
+        $orderParams['fields'] = $fileConfirm;
+        $orderParams['page'] = $page;
+        $orderParams['order'] = "confirm.update_time desc";
+        $orderParams['page_number'] = $pageNumber;
+        $orderRes = $this->invoke($apiPath, $orderParams);
+    }
+
+}

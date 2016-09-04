@@ -1,0 +1,68 @@
+<?php
+
+/**
+ * +---------------------------------------------------------------------
+ * | www.yunputong.com 粮人网
+ * +---------------------------------------------------------------------
+ * | Copyright (c) 2015 http://www.yunputong.com  All rights reserved.
+ * +---------------------------------------------------------------------
+ * | Author: zhoulianlei <zhoulianlei@yunputong.com >
+ * +---------------------------------------------------------------------
+ * | 基础用户信息相关模块
+ */
+
+namespace Base\UserModule\User;
+
+use System\Base;
+
+class App extends Base {
+
+    private $_rule = null; # 验证规则列表
+    private static $uc_prefix = null;
+
+    public function __construct() {
+        parent::__construct();
+    }
+
+
+    /**
+     * @api  Boss查看用户设置
+     * @apiVersion 1.0.1
+     * @apiName Base.UserModule.User.App.getVersion
+     * @apiTransaction N
+     * @apiAuthor Todor <tudou@liangrenwang.com>
+     * @apiDate 2015-10-21
+     * @apiSampleRequest On
+     */
+
+    public function getVersion($params){
+        $this->_rule = array(
+            array('uc_code', 'require', PARAMS_ERROR, ISSET_CHECK),
+            array('sc_code', 'require', PARAMS_ERROR, ISSET_CHECK),
+            array('device', 'require', PARAMS_ERROR, ISSET_CHECK),
+        );
+        if (!$this->checkInput($this->_rule, $params)) { 
+            return $this->res($this->getErrorField(), $this->getCheckError());
+        }
+
+        // 如果为空则获取 装置类型
+        if(empty($params['device'])){
+            $apiPath = "Base.UserModule.User.User.getDevice";
+            $device  = $this->invoke($apiPath,$params);
+            if($device['status'] != 0){
+                return $this->res(NULL,$device['status'],'',$device['message']);
+            }
+            $params['device'] = $device['response']['device'];
+        }
+
+        $where['device'] = $params['device'];
+        $version = D('AppVersion')->where($where)->order('id desc')->find();
+        if($version == FALSE){
+            return $this->res(NULL,4044);
+        }
+        return $this->res($version);
+    }
+
+}
+
+?>

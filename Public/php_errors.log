@@ -1,0 +1,253 @@
+[02-Dec-2015 13:38:40 Asia/Shanghai] PHP Parse error:  syntax error, unexpected '$apiPath' (T_VARIABLE) in E:\www\api\Subvert\Test\Bll\Boss\OrderInfo.class.php on line 138
+[02-Dec-2015 13:38:47 Asia/Shanghai] PHP Parse error:  syntax error, unexpected '$apiPath' (T_VARIABLE) in E:\www\api\Subvert\Test\Bll\Boss\OrderInfo.class.php on line 138
+[02-Dec-2015 13:39:34 Asia/Shanghai] PHP Parse error:  syntax error, unexpected '$apiPath' (T_VARIABLE) in E:\www\api\Subvert\Test\Bll\Boss\OrderInfo.class.php on line 138
+[02-Dec-2015 13:39:35 Asia/Shanghai] PHP Parse error:  syntax error, unexpected '$apiPath' (T_VARIABLE) in E:\www\api\Subvert\Test\Bll\Boss\OrderInfo.class.php on line 138
+[02-Dec-2015 15:16:29 Asia/Shanghai] PHP Parse error:  syntax error, unexpected '}' in E:\www\api\Subvert\Bll\Boss\Order\OrderInfo.class.php on line 394
+[02-Dec-2015 15:41:30 Asia/Shanghai] PHP Parse error:  syntax error, unexpected ',' in E:\www\api\Subvert\Bll\Boss\Order\OrderInfo.class.php on line 414
+[02-Dec-2015 18:04:38 Asia/Shanghai] PHP Parse error:  syntax error, unexpected ';', expecting ')' in E:\www\api\Subvert\Bll\Boss\Order\OrderInfo.class.php on line 188
+[03-Dec-2015 10:05:53 Asia/Shanghai] PHP Fatal error:  Call to undefined method Bll\Boss\User\User::versonList() in E:\www\api\System\Url.class.php on line 95
+[03-Dec-2015 10:51:00 Asia/Shanghai] PHP Parse error:  syntax error, unexpected '}' in E:\www\api\Subvert\Bll\Boss\User\User.class.php on line 365
+[03-Dec-2015 10:51:05 Asia/Shanghai] PHP Parse error:  syntax error, unexpected '}' in E:\www\api\Subvert\Bll\Boss\User\User.class.php on line 365
+[03-Dec-2015 10:51:26 Asia/Shanghai] PHP Parse error:  syntax error, unexpected '}' in E:\www\api\Subvert\Bll\Boss\User\User.class.php on line 365
+[03-Dec-2015 10:51:38 Asia/Shanghai] PHP Parse error:  syntax error, unexpected '}' in E:\www\api\Subvert\Bll\Boss\User\User.class.php on line 365
+[03-Dec-2015 11:09:02 Asia/Shanghai] PHP Parse error:  syntax error, unexpected '' (T_ENCAPSED_AND_WHITESPACE), expecting identifier (T_STRING) or variable (T_VARIABLE) or number (T_NUM_STRING) in E:\www\api\Subvert\Base\UserModule\User\App.class.php on line 93
+[03-Dec-2015 11:09:07 Asia/Shanghai] PHP Parse error:  syntax error, unexpected '' (T_ENCAPSED_AND_WHITESPACE), expecting identifier (T_STRING) or variable (T_VARIABLE) or number (T_NUM_STRING) in E:\www\api\Subvert\Base\UserModule\User\App.class.php on line 93
+[03-Dec-2015 14:41:53 Asia/Shanghai] PHP Fatal error:  Call to undefined method Bll\B2b\Item\Lists::getAppUrl() in E:\www\api\System\Url.class.php on line 95
+[03-Dec-2015 14:43:52 Asia/Shanghai] PHP Fatal error:  Call to undefined method Bll\B2b\Item\Lists::getAppUrl() in E:\www\api\System\Url.class.php on line 95
+[03-Dec-2015 15:50:42 Asia/Shanghai] PHP Fatal error:  require(): Failed opening required 'E:\www\api/Subvert/Bll/Boss/Verson/Verson.class.php' (include_path='.;C:\wnmp\php\pear') in E:\www\api\Common\common.php on line 834
+[03-Dec-2015 15:51:24 Asia/Shanghai] PHP Fatal error:  require(): Failed opening required 'E:\www\api/Subvert/Bll/Boss/Verson/Verson.class.php' (include_path='.;C:\wnmp\php\pear') in E:\www\api\Common\common.php on line 834
+[03-Dec-2015 15:52:19 Asia/Shanghai] PHP Fatal error:  require(): Failed opening required 'E:\www\api/Subvert/Bll/Boss/Verson/Verson.class.php' (include_path='.;C:\wnmp\php\pear') in E:\www\api\Common\common.php on line 834
+[07-Dec-2015 10:10:20 Asia/Shanghai] PHP Parse error:  syntax error, unexpected ''down_url'' (T_CONSTANT_ENCAPSED_STRING), expecting ')' in E:\www\api\Subvert\Test\Bll\Boss\OrderInfo.class.php on line 40
+[07-Dec-2015 10:10:23 Asia/Shanghai] PHP Parse error:  syntax error, unexpected ''down_url'' (T_CONSTANT_ENCAPSED_STRING), expecting ')' in E:\www\api\Subvert\Test\Bll\Boss\OrderInfo.class.php on line 40
+[07-Dec-2015 10:10:25 Asia/Shanghai] PHP Parse error:  syntax error, unexpected ''down_url'' (T_CONSTANT_ENCAPSED_STRING), expecting ')' in E:\www\api\Subvert\Test\Bll\Boss\OrderInfo.class.php on line 40
+[07-Dec-2015 10:10:25 Asia/Shanghai] PHP Parse error:  syntax error, unexpected ''down_url'' (T_CONSTANT_ENCAPSED_STRING), expecting ')' in E:\www\api\Subvert\Test\Bll\Boss\OrderInfo.class.php on line 40
+[07-Dec-2015 10:10:29 Asia/Shanghai] PHP Parse error:  syntax error, unexpected ''down_url'' (T_CONSTANT_ENCAPSED_STRING), expecting ')' in E:\www\api\Subvert\Test\Bll\Boss\OrderInfo.class.php on line 40
+[07-Dec-2015 14:35:19 Asia/Shanghai] PHP Fatal error:  Call to undefined function Base\OrderModule\B2b\p() in E:\www\api\Subvert\Base\OrderModule\B2b\Statistics.class.php on line 62
+[07-Dec-2015 14:35:20 Asia/Shanghai] PHP Fatal error:  Call to undefined function Base\OrderModule\B2b\p() in E:\www\api\Subvert\Base\OrderModule\B2b\Statistics.class.php on line 62
+[08-Dec-2015 10:18:58 Asia/Shanghai] PHP Fatal error:  require(): Failed opening required 'E:\www\api/Subvert/api/com/apitest///.class.php' (include_path='.;C:\wnmp\php\pear') in E:\www\api\Common\common.php on line 834
+[08-Dec-2015 11:56:34 Asia/Shanghai] PHP Fatal error:  require(): Failed opening required 'E:\www\api/Subvert/ Test/Bll/Boss/OrderInfo.class.php' (include_path='.;C:\wnmp\php\pear') in E:\www\api\Common\common.php on line 834
+[09-Dec-2015 13:42:37 Asia/Shanghai] PHP Fatal error:  require(): Failed opening required 'E:\www\api/Subvert/{&quot;login_uc_code&quot;:&quot;1120000000103&quot;,&quot;status&quot;:&quot;&quot;,&quot;username&quot;:&quot;&quot;,&quot;mobile&quot;:&quot;&quot;,&quot;real_name&quot;:&quot;&quot;,&quot;roles_id&quot;:&quot;&quot;,&quot;page&quot;:1}///.class.php' (include_path='.;C:\wnmp\php\pear') in E:\www\api\Common\common.php on line 834
+[09-Dec-2015 15:29:46 Asia/Shanghai] PHP Fatal error:  Call to undefined method Bll\B2b\Item\Lists::getAppUrl() in E:\www\api\System\Url.class.php on line 95
+[09-Dec-2015 15:29:48 Asia/Shanghai] PHP Fatal error:  Call to undefined method Bll\B2b\Item\Lists::getAppUrl() in E:\www\api\System\Url.class.php on line 95
+[09-Dec-2015 15:30:35 Asia/Shanghai] PHP Fatal error:  Call to undefined method Bll\B2b\Item\Lists::getAppUrl() in E:\www\api\System\Url.class.php on line 95
+[09-Dec-2015 17:15:11 Asia/Shanghai] PHP Fatal error:  Call to undefined function Com\Crontab\Bic\p() in E:\www\api\Subvert\Com\Crontab\Bic\Statistic.class.php on line 37
+[09-Dec-2015 17:15:12 Asia/Shanghai] PHP Fatal error:  Call to undefined function Com\Crontab\Bic\p() in E:\www\api\Subvert\Com\Crontab\Bic\Statistic.class.php on line 37
+[09-Dec-2015 17:15:13 Asia/Shanghai] PHP Fatal error:  Call to undefined function Com\Crontab\Bic\p() in E:\www\api\Subvert\Com\Crontab\Bic\Statistic.class.php on line 37
+[09-Dec-2015 17:15:13 Asia/Shanghai] PHP Fatal error:  Call to undefined function Com\Crontab\Bic\p() in E:\www\api\Subvert\Com\Crontab\Bic\Statistic.class.php on line 37
+[09-Dec-2015 17:15:13 Asia/Shanghai] PHP Fatal error:  Call to undefined function Com\Crontab\Bic\p() in E:\www\api\Subvert\Com\Crontab\Bic\Statistic.class.php on line 37
+[09-Dec-2015 18:36:28 Asia/Shanghai] PHP Fatal error:  Call to undefined method Bll\B2b\Item\Lists::getAppUrl() in E:\www\api\System\Url.class.php on line 95
+[11-Dec-2015 10:41:47 Asia/Shanghai] PHP Parse error:  syntax error, unexpected '' (T_ENCAPSED_AND_WHITESPACE), expecting identifier (T_STRING) or variable (T_VARIABLE) or number (T_NUM_STRING) in E:\www\api\Subvert\Base\UserModule\User\App.class.php on line 368
+[11-Dec-2015 10:42:34 Asia/Shanghai] PHP Parse error:  syntax error, unexpected '' (T_ENCAPSED_AND_WHITESPACE), expecting identifier (T_STRING) or variable (T_VARIABLE) or number (T_NUM_STRING) in E:\www\api\Subvert\Base\UserModule\User\App.class.php on line 369
+[11-Dec-2015 10:42:34 Asia/Shanghai] PHP Parse error:  syntax error, unexpected '' (T_ENCAPSED_AND_WHITESPACE), expecting identifier (T_STRING) or variable (T_VARIABLE) or number (T_NUM_STRING) in E:\www\api\Subvert\Base\UserModule\User\App.class.php on line 369
+[11-Dec-2015 10:42:35 Asia/Shanghai] PHP Parse error:  syntax error, unexpected '' (T_ENCAPSED_AND_WHITESPACE), expecting identifier (T_STRING) or variable (T_VARIABLE) or number (T_NUM_STRING) in E:\www\api\Subvert\Base\UserModule\User\App.class.php on line 369
+[11-Dec-2015 10:42:35 Asia/Shanghai] PHP Parse error:  syntax error, unexpected '' (T_ENCAPSED_AND_WHITESPACE), expecting identifier (T_STRING) or variable (T_VARIABLE) or number (T_NUM_STRING) in E:\www\api\Subvert\Base\UserModule\User\App.class.php on line 369
+[11-Dec-2015 10:42:35 Asia/Shanghai] PHP Parse error:  syntax error, unexpected '' (T_ENCAPSED_AND_WHITESPACE), expecting identifier (T_STRING) or variable (T_VARIABLE) or number (T_NUM_STRING) in E:\www\api\Subvert\Base\UserModule\User\App.class.php on line 369
+[11-Dec-2015 11:19:46 Asia/Shanghai] PHP Parse error:  syntax error, unexpected '}' in E:\www\api\Subvert\Base\UserModule\User\App.class.php on line 373
+[11-Dec-2015 11:46:10 Asia/Shanghai] PHP Parse error:  syntax error, unexpected '->' (T_OBJECT_OPERATOR) in E:\www\api\Subvert\Base\UserModule\User\App.class.php on line 427
+[17-Dec-2015 17:57:43 Asia/Shanghai] PHP Fatal error:  Call to undefined function Bll\Boss\Order\p() in E:\www\api\Subvert\Bll\Boss\Order\OrderInfo.class.php on line 398
+[17-Dec-2015 17:57:44 Asia/Shanghai] PHP Fatal error:  Call to undefined function Bll\Boss\Order\p() in E:\www\api\Subvert\Bll\Boss\Order\OrderInfo.class.php on line 398
+[18-Dec-2015 10:04:30 Asia/Shanghai] PHP Parse error:  syntax error, unexpected '}' in E:\www\api\Subvert\Base\OrderModule\B2b\OrderInfo.class.php on line 226
+[18-Dec-2015 10:05:03 Asia/Shanghai] PHP Parse error:  syntax error, unexpected '}' in E:\www\api\Subvert\Base\OrderModule\B2b\OrderInfo.class.php on line 226
+[18-Dec-2015 10:05:29 Asia/Shanghai] PHP Parse error:  syntax error, unexpected '}' in E:\www\api\Subvert\Base\OrderModule\B2b\OrderInfo.class.php on line 226
+[18-Dec-2015 10:06:03 Asia/Shanghai] PHP Parse error:  syntax error, unexpected '}' in E:\www\api\Subvert\Base\OrderModule\B2b\OrderInfo.class.php on line 226
+[18-Dec-2015 10:06:29 Asia/Shanghai] PHP Parse error:  syntax error, unexpected '}' in E:\www\api\Subvert\Base\OrderModule\B2b\OrderInfo.class.php on line 226
+[18-Dec-2015 10:07:03 Asia/Shanghai] PHP Parse error:  syntax error, unexpected '}' in E:\www\api\Subvert\Base\OrderModule\B2b\OrderInfo.class.php on line 226
+[18-Dec-2015 10:07:29 Asia/Shanghai] PHP Parse error:  syntax error, unexpected '}' in E:\www\api\Subvert\Base\OrderModule\B2b\OrderInfo.class.php on line 226
+[18-Dec-2015 10:08:03 Asia/Shanghai] PHP Parse error:  syntax error, unexpected '}' in E:\www\api\Subvert\Base\OrderModule\B2b\OrderInfo.class.php on line 226
+[18-Dec-2015 10:08:29 Asia/Shanghai] PHP Parse error:  syntax error, unexpected '}' in E:\www\api\Subvert\Base\OrderModule\B2b\OrderInfo.class.php on line 226
+[18-Dec-2015 10:09:03 Asia/Shanghai] PHP Parse error:  syntax error, unexpected '}' in E:\www\api\Subvert\Base\OrderModule\B2b\OrderInfo.class.php on line 226
+[18-Dec-2015 10:09:29 Asia/Shanghai] PHP Parse error:  syntax error, unexpected '}' in E:\www\api\Subvert\Base\OrderModule\B2b\OrderInfo.class.php on line 226
+[18-Dec-2015 10:10:03 Asia/Shanghai] PHP Parse error:  syntax error, unexpected '}' in E:\www\api\Subvert\Base\OrderModule\B2b\OrderInfo.class.php on line 226
+[18-Dec-2015 10:10:29 Asia/Shanghai] PHP Parse error:  syntax error, unexpected '}' in E:\www\api\Subvert\Base\OrderModule\B2b\OrderInfo.class.php on line 226
+[18-Dec-2015 10:11:03 Asia/Shanghai] PHP Parse error:  syntax error, unexpected ')' in E:\www\api\Subvert\Base\OrderModule\B2b\OrderInfo.class.php on line 224
+[18-Dec-2015 10:14:03 Asia/Shanghai] PHP Parse error:  syntax error, unexpected 'print_r' (T_STRING) in E:\www\api\Subvert\Base\OrderModule\B2b\OrderInfo.class.php on line 226
+[18-Dec-2015 10:14:29 Asia/Shanghai] PHP Parse error:  syntax error, unexpected 'print_r' (T_STRING) in E:\www\api\Subvert\Base\OrderModule\B2b\OrderInfo.class.php on line 226
+[21-Dec-2015 18:52:30 Asia/Shanghai] PHP Parse error:  syntax error, unexpected 'array' (T_ARRAY), expecting ')' in E:\www\api\Subvert\Base\UserModule\User\App.class.php on line 236
+[21-Dec-2015 18:52:40 Asia/Shanghai] PHP Parse error:  syntax error, unexpected 'array' (T_ARRAY), expecting ')' in E:\www\api\Subvert\Base\UserModule\User\App.class.php on line 236
+[23-Dec-2015 09:59:37 Asia/Shanghai] PHP Parse error:  syntax error, unexpected 'return' (T_RETURN) in E:\www\api\Subvert\Base\UserModule\User\App.class.php on line 399
+[23-Dec-2015 09:59:38 Asia/Shanghai] PHP Parse error:  syntax error, unexpected 'return' (T_RETURN) in E:\www\api\Subvert\Base\UserModule\User\App.class.php on line 399
+[23-Dec-2015 09:59:39 Asia/Shanghai] PHP Parse error:  syntax error, unexpected 'return' (T_RETURN) in E:\www\api\Subvert\Base\UserModule\User\App.class.php on line 399
+[23-Dec-2015 09:59:39 Asia/Shanghai] PHP Parse error:  syntax error, unexpected 'return' (T_RETURN) in E:\www\api\Subvert\Base\UserModule\User\App.class.php on line 399
+[23-Dec-2015 09:59:52 Asia/Shanghai] PHP Parse error:  syntax error, unexpected 'return' (T_RETURN) in E:\www\api\Subvert\Base\UserModule\User\App.class.php on line 399
+[23-Dec-2015 09:59:52 Asia/Shanghai] PHP Parse error:  syntax error, unexpected 'return' (T_RETURN) in E:\www\api\Subvert\Base\UserModule\User\App.class.php on line 399
+[23-Dec-2015 09:59:53 Asia/Shanghai] PHP Parse error:  syntax error, unexpected 'return' (T_RETURN) in E:\www\api\Subvert\Base\UserModule\User\App.class.php on line 399
+[23-Dec-2015 09:59:54 Asia/Shanghai] PHP Parse error:  syntax error, unexpected 'return' (T_RETURN) in E:\www\api\Subvert\Base\UserModule\User\App.class.php on line 399
+[23-Dec-2015 09:59:54 Asia/Shanghai] PHP Parse error:  syntax error, unexpected 'return' (T_RETURN) in E:\www\api\Subvert\Base\UserModule\User\App.class.php on line 399
+[23-Dec-2015 09:59:54 Asia/Shanghai] PHP Parse error:  syntax error, unexpected 'return' (T_RETURN) in E:\www\api\Subvert\Base\UserModule\User\App.class.php on line 399
+[23-Dec-2015 09:59:54 Asia/Shanghai] PHP Parse error:  syntax error, unexpected 'return' (T_RETURN) in E:\www\api\Subvert\Base\UserModule\User\App.class.php on line 399
+[23-Dec-2015 10:00:40 Asia/Shanghai] PHP Parse error:  syntax error, unexpected '}' in E:\www\api\Subvert\Base\UserModule\User\App.class.php on line 403
+[23-Dec-2015 10:00:41 Asia/Shanghai] PHP Parse error:  syntax error, unexpected '}' in E:\www\api\Subvert\Base\UserModule\User\App.class.php on line 403
+[23-Dec-2015 10:00:41 Asia/Shanghai] PHP Parse error:  syntax error, unexpected '}' in E:\www\api\Subvert\Base\UserModule\User\App.class.php on line 403
+[23-Dec-2015 10:00:41 Asia/Shanghai] PHP Parse error:  syntax error, unexpected '}' in E:\www\api\Subvert\Base\UserModule\User\App.class.php on line 403
+[23-Dec-2015 10:00:41 Asia/Shanghai] PHP Parse error:  syntax error, unexpected '}' in E:\www\api\Subvert\Base\UserModule\User\App.class.php on line 403
+[23-Dec-2015 18:01:13 Asia/Shanghai] PHP Fatal error:  Call to undefined method Test\Bll\B2bItem\Lists::platformLists() in E:\www\api\System\Url.class.php on line 95
+[23-Dec-2015 18:01:14 Asia/Shanghai] PHP Fatal error:  Call to undefined method Test\Bll\B2bItem\Lists::platformLists() in E:\www\api\System\Url.class.php on line 95
+[23-Dec-2015 18:01:19 Asia/Shanghai] PHP Fatal error:  Call to undefined method Test\Bll\B2bItem\Lists::platformLists() in E:\www\api\System\Url.class.php on line 95
+[23-Dec-2015 19:10:20 Asia/Shanghai] PHP Fatal error:  Call to undefined method Test\Bll\B2bItem\Lists::platformLists() in E:\www\api\System\Url.class.php on line 95
+[29-Dec-2015 14:25:33 Asia/Shanghai] PHP Fatal error:  Call to undefined function Base\UserModule\User\p() in E:\www\api\Subvert\Base\UserModule\User\App.class.php on line 518
+[29-Dec-2015 14:25:34 Asia/Shanghai] PHP Fatal error:  Call to undefined function Base\UserModule\User\p() in E:\www\api\Subvert\Base\UserModule\User\App.class.php on line 518
+[29-Dec-2015 14:25:48 Asia/Shanghai] PHP Fatal error:  Call to undefined function Base\UserModule\User\p() in E:\www\api\Subvert\Base\UserModule\User\App.class.php on line 518
+[29-Dec-2015 14:33:36 Asia/Shanghai] PHP Fatal error:  Call to undefined function Base\UserModule\User\p() in E:\www\api\Subvert\Base\UserModule\User\App.class.php on line 522
+[29-Dec-2015 14:33:38 Asia/Shanghai] PHP Fatal error:  Call to undefined function Base\UserModule\User\p() in E:\www\api\Subvert\Base\UserModule\User\App.class.php on line 522
+[29-Dec-2015 14:41:09 Asia/Shanghai] PHP Parse error:  syntax error, unexpected '$patch' (T_VARIABLE) in E:\www\api\Subvert\Base\UserModule\User\App.class.php on line 529
+[29-Dec-2015 14:41:11 Asia/Shanghai] PHP Parse error:  syntax error, unexpected '$patch' (T_VARIABLE) in E:\www\api\Subvert\Base\UserModule\User\App.class.php on line 529
+[29-Dec-2015 14:41:12 Asia/Shanghai] PHP Parse error:  syntax error, unexpected '$patch' (T_VARIABLE) in E:\www\api\Subvert\Base\UserModule\User\App.class.php on line 529
+[29-Dec-2015 14:41:12 Asia/Shanghai] PHP Parse error:  syntax error, unexpected '$patch' (T_VARIABLE) in E:\www\api\Subvert\Base\UserModule\User\App.class.php on line 529
+[29-Dec-2015 14:41:12 Asia/Shanghai] PHP Parse error:  syntax error, unexpected '$patch' (T_VARIABLE) in E:\www\api\Subvert\Base\UserModule\User\App.class.php on line 529
+[29-Dec-2015 14:41:12 Asia/Shanghai] PHP Parse error:  syntax error, unexpected '$patch' (T_VARIABLE) in E:\www\api\Subvert\Base\UserModule\User\App.class.php on line 529
+[29-Dec-2015 14:41:13 Asia/Shanghai] PHP Parse error:  syntax error, unexpected '$patch' (T_VARIABLE) in E:\www\api\Subvert\Base\UserModule\User\App.class.php on line 529
+[29-Dec-2015 14:41:13 Asia/Shanghai] PHP Parse error:  syntax error, unexpected '$patch' (T_VARIABLE) in E:\www\api\Subvert\Base\UserModule\User\App.class.php on line 529
+[29-Dec-2015 14:41:14 Asia/Shanghai] PHP Parse error:  syntax error, unexpected '$patch' (T_VARIABLE) in E:\www\api\Subvert\Base\UserModule\User\App.class.php on line 529
+[29-Dec-2015 14:50:23 Asia/Shanghai] PHP Parse error:  syntax error, unexpected 'print_r' (T_STRING) in E:\www\api\Subvert\Base\UserModule\User\App.class.php on line 541
+[31-Dec-2015 14:32:31 Asia/Shanghai] PHP Fatal error:  Call to undefined function Base\UserModule\User\p() in E:\www\api\Subvert\Base\UserModule\User\App.class.php on line 549
+[05-Jan-2016 12:51:56 Asia/Shanghai] PHP Fatal error:  Out of memory (allocated 2883584) (tried to allocate 72 bytes) in E:\www\api\System\Mysql.class.php on line 216
+[05-Jan-2016 12:51:57 Asia/Shanghai] PHP Fatal error:  Out of memory (allocated 524288) (tried to allocate 5120 bytes) in E:\www\api\System\Base.class.php on line 255
+[05-Jan-2016 12:51:57 Asia/Shanghai] PHP Fatal error:  Out of memory (allocated 1835008) (tried to allocate 27 bytes) in E:\www\api\Subvert\Base\OrderModule\B2b\Status.class.php on line 393
+[05-Jan-2016 12:51:57 Asia/Shanghai] PHP Fatal error:  Out of memory (allocated 1048576) (tried to allocate 49152 bytes) in E:\www\api\Conf\constant.php on line 107
+[08-Jan-2016 11:16:37 Asia/Shanghai] PHP Fatal error:  Class '\Bll\Boss\Order \OrderInfo' not found in E:\www\api\Common\common.php on line 835
+[08-Jan-2016 11:42:13 Asia/Shanghai] PHP Fatal error:  Class '\Bll\Boss\Order \OrderInfo' not found in E:\www\api\Common\common.php on line 835
+[13-Jan-2016 18:33:15 Asia/Shanghai] PHP Fatal error:  Call to undefined method Bll\B2b\Order\Order::autoCancel() in E:\www\api\System\Url.class.php on line 95
+[14-Jan-2016 13:31:54 Asia/Shanghai] PHP Fatal error:  Call to undefined method Bll\B2b\Order\Order::autoCancel() in E:\www\api\System\Url.class.php on line 95
+[14-Jan-2016 15:21:55 Asia/Shanghai] PHP Fatal error:  Call to undefined method Bll\B2b\User\Region::getCoupon() in E:\www\api\System\Url.class.php on line 95
+[14-Jan-2016 16:15:08 Asia/Shanghai] PHP Fatal error:  Call to undefined method Bll\B2b\Order\Order::autoCancel() in E:\www\api\System\Url.class.php on line 95
+[14-Jan-2016 16:17:52 Asia/Shanghai] PHP Fatal error:  Call to undefined method Bll\B2b\Order\Order::autoCancel() in E:\www\api\System\Url.class.php on line 95
+[14-Jan-2016 18:43:18 Asia/Shanghai] PHP Fatal error:  Call to undefined method Bll\B2b\Order\Order::autoCancel() in E:\www\api\System\Url.class.php on line 95
+[14-Jan-2016 18:45:07 Asia/Shanghai] PHP Fatal error:  Call to undefined method Bll\B2b\Order\Order::autoCancel() in E:\www\api\System\Url.class.php on line 95
+[19-Jan-2016 14:03:30 Asia/Shanghai] PHP Parse error:  syntax error, unexpected ';', expecting ')' in E:\www\api\Subvert\Bll\Boss\Order\OrderInfo.class.php on line 202
+[19-Jan-2016 14:31:17 Asia/Shanghai] PHP Parse error:  syntax error, unexpected '' (T_ENCAPSED_AND_WHITESPACE), expecting identifier (T_STRING) or variable (T_VARIABLE) or number (T_NUM_STRING) in E:\www\api\Subvert\Base\OrderModule\B2b\Statistics.class.php on line 315
+[19-Jan-2016 14:31:53 Asia/Shanghai] PHP Parse error:  syntax error, unexpected '' (T_ENCAPSED_AND_WHITESPACE), expecting identifier (T_STRING) or variable (T_VARIABLE) or number (T_NUM_STRING) in E:\www\api\Subvert\Base\OrderModule\B2b\Statistics.class.php on line 315
+[19-Jan-2016 14:31:55 Asia/Shanghai] PHP Parse error:  syntax error, unexpected '' (T_ENCAPSED_AND_WHITESPACE), expecting identifier (T_STRING) or variable (T_VARIABLE) or number (T_NUM_STRING) in E:\www\api\Subvert\Base\OrderModule\B2b\Statistics.class.php on line 315
+[19-Jan-2016 14:31:57 Asia/Shanghai] PHP Parse error:  syntax error, unexpected '' (T_ENCAPSED_AND_WHITESPACE), expecting identifier (T_STRING) or variable (T_VARIABLE) or number (T_NUM_STRING) in E:\www\api\Subvert\Base\OrderModule\B2b\Statistics.class.php on line 315
+[19-Jan-2016 14:33:22 Asia/Shanghai] PHP Parse error:  syntax error, unexpected '' (T_ENCAPSED_AND_WHITESPACE), expecting identifier (T_STRING) or variable (T_VARIABLE) or number (T_NUM_STRING) in E:\www\api\Subvert\Base\OrderModule\B2b\Statistics.class.php on line 315
+[19-Jan-2016 14:33:41 Asia/Shanghai] PHP Parse error:  syntax error, unexpected '' (T_ENCAPSED_AND_WHITESPACE), expecting identifier (T_STRING) or variable (T_VARIABLE) or number (T_NUM_STRING) in E:\www\api\Subvert\Base\OrderModule\B2b\Statistics.class.php on line 315
+[19-Jan-2016 14:33:42 Asia/Shanghai] PHP Parse error:  syntax error, unexpected '' (T_ENCAPSED_AND_WHITESPACE), expecting identifier (T_STRING) or variable (T_VARIABLE) or number (T_NUM_STRING) in E:\www\api\Subvert\Base\OrderModule\B2b\Statistics.class.php on line 315
+[19-Jan-2016 15:37:19 Asia/Shanghai] PHP Fatal error:  Class '\Test\Bll\BossUser\Customer' not found in E:\www\api\Common\common.php on line 858
+[19-Jan-2016 15:37:32 Asia/Shanghai] PHP Fatal error:  Class '\Test\Bll\BossUser\Customer' not found in E:\www\api\Common\common.php on line 858
+[19-Jan-2016 15:37:33 Asia/Shanghai] PHP Fatal error:  Class '\Test\Bll\BossUser\Customer' not found in E:\www\api\Common\common.php on line 858
+[20-Jan-2016 10:14:54 Asia/Shanghai] PHP Parse error:  syntax error, unexpected ';' in E:\www\api\Subvert\Bll\Boss\User\Customer.class.php on line 107
+[20-Jan-2016 10:20:42 Asia/Shanghai] PHP Parse error:  syntax error, unexpected '=', expecting ')' in E:\www\api\Subvert\Bll\Boss\User\Customer.class.php on line 109
+[20-Jan-2016 10:32:14 Asia/Shanghai] PHP Parse error:  syntax error, unexpected '}' in E:\www\api\Common\function.php on line 412
+[20-Jan-2016 10:32:14 Asia/Shanghai] PHP Parse error:  syntax error, unexpected '}' in E:\www\api\Common\function.php on line 412
+[20-Jan-2016 15:14:29 Asia/Shanghai] PHP Parse error:  syntax error, unexpected '*' in E:\www\api\Subvert\Base\OrderModule\B2b\Statistics.class.php on line 511
+[20-Jan-2016 15:39:49 Asia/Shanghai] PHP Parse error:  syntax error, unexpected 'if' (T_IF) in E:\www\api\Subvert\Bll\Boss\User\Customer.class.php on line 140
+[20-Jan-2016 15:40:11 Asia/Shanghai] PHP Parse error:  syntax error, unexpected 'if' (T_IF) in E:\www\api\Subvert\Bll\Boss\User\Customer.class.php on line 140
+[20-Jan-2016 15:40:12 Asia/Shanghai] PHP Parse error:  syntax error, unexpected 'if' (T_IF) in E:\www\api\Subvert\Bll\Boss\User\Customer.class.php on line 140
+[20-Jan-2016 15:40:13 Asia/Shanghai] PHP Parse error:  syntax error, unexpected 'if' (T_IF) in E:\www\api\Subvert\Bll\Boss\User\Customer.class.php on line 140
+[20-Jan-2016 15:40:37 Asia/Shanghai] PHP Parse error:  syntax error, unexpected 'if' (T_IF) in E:\www\api\Subvert\Bll\Boss\User\Customer.class.php on line 140
+[20-Jan-2016 15:40:38 Asia/Shanghai] PHP Parse error:  syntax error, unexpected 'if' (T_IF) in E:\www\api\Subvert\Bll\Boss\User\Customer.class.php on line 140
+[20-Jan-2016 15:40:38 Asia/Shanghai] PHP Parse error:  syntax error, unexpected 'if' (T_IF) in E:\www\api\Subvert\Bll\Boss\User\Customer.class.php on line 140
+[20-Jan-2016 15:40:48 Asia/Shanghai] PHP Parse error:  syntax error, unexpected 'return' (T_RETURN) in E:\www\api\Subvert\Bll\Boss\User\Customer.class.php on line 151
+[20-Jan-2016 15:40:49 Asia/Shanghai] PHP Parse error:  syntax error, unexpected 'return' (T_RETURN) in E:\www\api\Subvert\Bll\Boss\User\Customer.class.php on line 151
+[20-Jan-2016 15:40:50 Asia/Shanghai] PHP Parse error:  syntax error, unexpected 'return' (T_RETURN) in E:\www\api\Subvert\Bll\Boss\User\Customer.class.php on line 151
+[20-Jan-2016 15:58:45 Asia/Shanghai] PHP Fatal error:  Call to undefined method Test\Bll\BossUser\Customer::itemLists() in E:\www\api\System\Url.class.php on line 95
+[20-Jan-2016 19:37:04 Asia/Shanghai] PHP Fatal error:  Call to undefined function money_format() in E:\www\api\Common\function.php on line 404
+[20-Jan-2016 19:37:15 Asia/Shanghai] PHP Fatal error:  Call to undefined function money_format() in E:\www\api\Common\function.php on line 404
+[20-Jan-2016 19:37:16 Asia/Shanghai] PHP Fatal error:  Call to undefined function money_format() in E:\www\api\Common\function.php on line 404
+[22-Jan-2016 16:33:58 Asia/Shanghai] PHP Parse error:  syntax error, unexpected 'foreach' (T_FOREACH) in E:\www\api\Subvert\Bll\Boss\User\Customer.class.php on line 234
+[25-Jan-2016 14:33:08 Asia/Shanghai] PHP Fatal error:  Unsupported operand types in E:\www\api\Subvert\Bll\Boss\User\Customer.class.php on line 191
+[28-Jan-2016 14:59:29 Asia/Shanghai] PHP Fatal error:  Call to undefined method Base\OrderModule\B2b\OrderInfo::closePay() in E:\www\api\System\Url.class.php on line 95
+[30-Aug-2016 07:06:35 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:06:36 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:06:36 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:06:39 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:06:40 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:06:40 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:06:41 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:06:41 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:06:44 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:06:47 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:06:50 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:06:53 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:06:56 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:06:59 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:07:02 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:07:05 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:07:08 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:07:11 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:07:14 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:07:17 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:07:20 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:07:23 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:07:24 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:07:25 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:07:26 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:07:28 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:07:29 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:07:31 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:07:32 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:07:35 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:07:38 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:07:41 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:07:44 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:07:47 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:07:50 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:07:53 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:07:56 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:07:59 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:08:02 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:08:05 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:08:08 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:08:11 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:08:14 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:08:17 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:08:20 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:08:23 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:08:26 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:08:29 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:08:32 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:08:35 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:08:38 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:08:41 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:08:44 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:08:47 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:08:50 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:08:53 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:08:56 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:08:59 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:09:02 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:09:05 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:09:08 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:09:11 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:09:14 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:09:17 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:09:20 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:09:23 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:09:26 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:09:29 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:09:32 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:09:35 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:09:38 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:09:41 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:09:44 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:09:47 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:09:50 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:09:53 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:09:56 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:09:59 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:10:02 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:10:05 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:10:08 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:10:11 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:10:14 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:10:17 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:10:20 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:10:23 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:10:26 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:10:29 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:10:32 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:10:35 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:10:38 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:10:41 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:10:44 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:10:47 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:10:50 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 07:10:53 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 23:57:25 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 23:57:26 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 23:57:26 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 23:57:26 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 23:57:28 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 23:57:30 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 23:57:30 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 23:57:30 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83
+[30-Aug-2016 23:58:10 PRC] PHP Parse error:  syntax error, unexpected ']' in D:\www\api\System\Controller.class.php on line 83

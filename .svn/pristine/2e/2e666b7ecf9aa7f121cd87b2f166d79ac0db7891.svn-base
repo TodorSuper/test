@@ -1,0 +1,74 @@
+<?php
+
+/**
+ * +---------------------------------------------------------------------
+ * | www.yunputong.com 粮人网
+ * +---------------------------------------------------------------------
+ * | Copyright (c) 2015 http://www.yunputong.com  All rights reserved.
+ * +---------------------------------------------------------------------
+ * | Author: zhoulianlei <zhoulianlei@yunputong.com >
+ * +---------------------------------------------------------------------
+ * | 店铺用户相关
+ */
+
+namespace Bll\Pop\Store;
+
+use System\Base;
+
+class Store extends Base {
+
+    private $_rule = null; # 验证规则列表
+    private static $uc_prefix = null;
+
+    public function __construct() {
+        parent::__construct();
+    }
+
+        /**
+	 * 获取店铺信息
+	 * Bll.Pop.Store.Store.get
+	 * @param string sc_code
+	 * @access public
+	 * @return void
+	 */
+        public function get($params){
+            $apiPath   = "Base.StoreModule.Basic.Store.get";
+            $store_res = $this->invoke($apiPath, $params);
+            return $this->res($store_res['response'],$store_res['status'],'',$store_res['message']);
+        }
+        
+         /**
+	 * 更新店铺信息
+	 * Bll.Pop.Store.Store.update
+	 * @param string sc_code
+	 * @access public
+	 * @return void
+	 */
+        public function update($params){
+           try{
+                D()->startTrans();
+                
+                $params['city']     = C('DEFAULT_CITY');
+                $params['province'] = C('DEFAULT_PROVINCE');
+                unset($params['data']['phone']);
+                $apiPath            = "Base.StoreModule.Basic.Store.update"; 
+                $update_res         = $this->invoke($apiPath,$params);
+                if($update_res['status'] != 0){
+                    throw new \Exception($update_res['message'],$update_res['status']);
+                }
+                $res = D()->commit();
+                if($res === FALSE){
+                    throw new \Exception('事务提交失败',17);
+                }
+                return $this->res($update_res['response']);
+           } catch (\Exception $ex) {
+                D()->rollck();
+                return $this->res(NULL,4031,'',$ex->getMessage());
+           }
+        }
+        
+       
+
+
+}
+?>

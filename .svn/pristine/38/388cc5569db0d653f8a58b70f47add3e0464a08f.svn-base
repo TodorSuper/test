@@ -1,0 +1,110 @@
+<?php
+
+/**
+ * +---------------------------------------------------------------------
+ * | www.yunputong.com 粮人网
+ * +---------------------------------------------------------------------
+ * | Copyright (c) 2015 http://www.yunputong.com  All rights reserved.
+ * +---------------------------------------------------------------------
+ * | Author: zhoulianlei <zhoulianlei@yunputong.com >
+ * +---------------------------------------------------------------------
+ * | cms用户相关模块
+ */
+
+namespace Bll\Cms\User;
+use System\Base;
+
+class User extends Base {
+
+    private $_rule = null; # 验证规则列表
+    private static $uc_prefix = null;
+    public function __construct() {
+        parent::__construct();
+        self::$uc_prefix = 'Uc';
+    }
+    
+    /**
+     * 修改密码
+     * Bll.Cms.User.User.rePassword
+     * @param  [type] $params [description]
+     * @return [type]         [description]
+     */
+    public function rePassword($params){
+        try {
+            D()->startTrans();
+            $apiPath = 'Base.UserModule.User.Basic.changePwd';
+            $params['check_ori_pwd'] = 'YES';
+            $res = $this->invoke($apiPath, $params);
+            if ($res['status'] != 0) {
+                return $this->endInvoke(NULL, $res['status']);
+            }
+            D()->commit();
+            return $this->endInvoke(true);
+        } catch (Exception $e) {
+            D()->rollback();
+            return $this->endInvoke(NULL, 8);
+        }
+    }
+
+    /**
+     * 生成用户编码
+     * Bll.Cms.User.User.mkCode
+     * @param array $data   用户数据
+     * @param integer $userType  预留用户类型   UC_USER_MERCHANT     UC_USER_MERCHANT 
+     * @return integer   成功时返回  自增id
+     */
+    public function mkCode($params){
+         try{
+             D()->startTrans();
+             $apiPath = "Com.Tool.Code.CodeGenerate.mkCode";
+             $data = array(
+                'busType'=>UC_USER,
+                'preBusType'=>UC_USER_CMS,
+                'codeType'=>SEQUENCE_USER,
+            );
+             $code_res = $this->invoke($apiPath, $data);
+             D()->commit();
+             return $this->res($code_res['response']);
+         } catch (\Exception $ex) {
+             D()->rollback();
+             return $this->res(NULL,10002,'','生成用户编码失败');
+         }        
+    }
+    /**
+     * 获取downlist列表
+     * Bll.Cms.User.User.getDownList
+     * @param  [type] $params [description]
+     * @return [return]         [List]
+     */
+    public function getDownList($params){
+        $apiPath = "Com.DataCenter.Download.DownList.getDownlist";
+        $list_res = $this->invoke($apiPath, $params);
+        return $this->endInvoke($list_res['response']);
+    }
+    /**
+     * 获取商家的列表
+     * Base.StoreModule.Basic.User.getMerchantInfo
+     * @return [return]         [List]
+     */
+    public function getMerchantLists($params){
+       // $apiPath = "Base.StoreModule.Basic.User.getMerchantLists";
+        $apiPath =  "Base.StoreModule.Basic.Store.lists";
+        $list_res = $this->invoke($apiPath, $params);
+        if(0 !== $list_res['status']){
+            return $this->endInvoke('查询用户列表失败');
+        }
+
+        return $this->endInvoke($list_res['response']);
+    }
+
+    public function login($params) {
+        $apiPath =  "Base.UserModule.User.User.login";
+        $list_res = $this->invoke($apiPath, $params);
+        if(0 !== $list_res['status']){
+            return $this->endInvoke('登录失败');
+        }
+        return $this->endInvoke($list_res['response']);
+    }
+}
+
+?>

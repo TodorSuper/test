@@ -1,0 +1,67 @@
+<?php
+
+/**
+ * +---------------------------------------------------------------------
+ * | www.yunputong.com 粮人网
+ * +---------------------------------------------------------------------
+ * | Copyright (c) 2015 http://www.yunputong.com  All rights reserved.
+ * +---------------------------------------------------------------------
+ * | Author: wangguangjian <wangguangjian@liangrenwang.com >
+ * +---------------------------------------------------------------------
+ * | b2b订单相关状态转换
+ */
+
+namespace Base\FcModule\Account;
+
+use System\Base;
+
+//买家自提，卖家配送
+class Status extends Base
+{
+
+    public function getAccountStatus ($account_status) {
+        $account_lists = array(
+          FC_ACCOUNT_STATUS_NO_ACCOUNT => '未对账', //货到付款
+            FC_ACCOUNT_STATUS_ACCOUNT => '已对账',
+        );
+        if (!empty($account_status)) {
+            return $account_lists[$account_status];
+        }
+        return $account_lists;
+    }
+
+    public function getPayMethod ($pay_status) {
+        $pay_group = array(
+            PAY_METHOD_ONLINE_REMIT => '银行转账',
+            PAY_METHOD_ONLINE_WEIXIN => '微信支付',
+            PAY_METHOD_ONLINE_ALIPAY => '支付宝支付',
+        );
+        if (!empty($pay_status)) {
+            return $pay_group[$pay_status];
+        }
+        return $pay_group;
+    }
+
+    public function getBalanceStatus ($balance_status) {
+        $balance_group = array(
+            FC_BALANCE_STATUS_NO_BALANCE => '未到账',
+            FC_BALANCE_STATUS_YES_BALANCE => '已到账',
+            FC_BALANCE_STATUS_BALANCE => '已结算',
+        );
+        if (!empty($balance_status)) {
+            return $balance_group[$balance_status];
+        }
+        return $balance_group;
+    }
+
+    public function getPayStatus ($pay_status) {
+        $pay_status_lsit = array(
+            OC_ORDER_PAY_STATUS_UNPAY => '待付款',
+            OC_ORDER_PAY_STATUS_PAY => '已付款',
+        );
+        if (!empty($pay_status)) {
+            return $pay_status_lsit[$pay_status];
+        }
+        return $pay_status_lsit;
+    }
+}

@@ -1,0 +1,482 @@
+<head>
+<meta http-equiv=Content-Type content="text/html;charset=utf-8">
+		<title>Server_Api_Call_Client</title>
+		<script type="text/javascript" src="js/md5.min.js"></script>
+		<script type="text/javascript" src="js/JsonUti.js"></script>
+		<script type="text/javascript" src="js/jquery-2.0.3.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="easyui/themes/bootstrap/easyui.css">
+		<link rel="stylesheet" type="text/css" href="easyui/themes/icon.css">
+		<script type="text/javascript" src="easyui/jquery.easyui.min.js"></script>
+	  	<link rel="stylesheet" href="wind/reveal.css">	
+		<script type="text/javascript">
+		 Array.prototype.remove = function(val) {
+			var index = this.indexOf(val);
+			if (index > -1) {
+				this.splice(index, 1);
+			}
+		};
+
+        	var ApiConfig={
+        			'apiHost': 'http://' + window.location.host,
+        			'entryPage': '/index.php'
+        	};
+        
+			function sendRequest(){
+        		var secKey = document.getElementById("secKey").value;
+        		if(secKey.length<1){
+        			alert("加密密钥输入有误, 请重新输入...");
+        			return false;
+        		}
+        		
+				var apiPath = $("#selectPath .validatebox-text").val();
+
+        		if(apiPath.length<5){
+        			alert("请求路径输入有误, 请重新输入...");
+        			return false;
+        		}
+        		
+				var apiArgs = $("#selectArgs .validatebox-text").val();
+        		if(apiArgs.length<2){
+        			alert("JSON参数输入有误, 请重新输入...");
+        			return false;
+        		}
+        		
+				var signKey = md5(apiArgs + secKey + apiPath);
+				loadApiPath(apiPath);
+				loadApiData(apiPath, apiArgs);
+        	   $( "#RESPONSE" ).html( '' );
+               var request = $.ajax({
+               	  url: ApiConfig.apiHost + ApiConfig.entryPage,
+               	  type: "POST",
+				  data: { 'func' : apiPath, 'params': apiArgs, 'signKey': signKey },
+				  async: false,
+               	  //dataType: "json",
+				  success: function( data ) {
+					//$("#log").find("textarea").append("1233333333\n");
+//				      var scrollTop =  $("#log").find("textarea")[0].scrollHeight;
+//					  $("#log").find("textarea").scrollTop(scrollTop);
+               		  try{
+	               		var jsonStr = JsonUti.convertToString( eval( "("+data+")" ) )
+	               		$( "#RESPONSE" ).css("border-color","green").html( jsonStr );  
+               		  }catch(exception){
+	               		$( "#RESPONSE" ).css("border-color","red").html( data );  
+               		  }
+					},
+					error : function(data) {
+					data = data.responseText;
+               		  try{
+	               		var jsonStr = JsonUti.convertToString( eval( "("+data+")" ) )
+	               		$( "#RESPONSE" ).css("border-color","green").html( jsonStr );  
+               		  }catch(exception){
+	               		$( "#RESPONSE" ).css("border-color","red").html( data );  
+               		  }
+//						console.log();
+					}
+				});
+				signKey = md5("{}" + secKey + "Com.Tool.FrameLogs.Logs.getAll");
+				if(closeDebug == 0) {
+				var request = $.ajax({
+				  url: ApiConfig.apiHost + ApiConfig.entryPage,
+				  type: "POST",
+				  data: { 'func' : "Com.Tool.FrameLogs.Logs.getAll", 'params': '{}', 'signKey': signKey },
+				  //dataType: "json",
+				  success: function( data ) {
+						var json = eval( "("+data+")" );
+						var strs = json.response;
+						var log = strs.log;
+						var trace = strs.trace;
+						if(oneLog == 1) {
+							$("#log").find("textarea").html(log);
+							var scrollTop =  $("#log").find("textarea")[0].scrollHeight;
+						}else {
+							$("#log").find("textarea").append(log);
+							var scrollTop =  $("#log").find("textarea")[0].scrollHeight;
+						}
+
+						if(scrollTop > 10000) {
+							$("#log").find("textarea").html(log);
+							var scrollTop =  $("#log").find("textarea")[0].scrollHeight;
+						}
+
+						$("#log").find("textarea").scrollTop(scrollTop);
+
+						if(oneTrack == 1) {
+							$("#trace").find("textarea").html(trace);
+							var scrollTop =  $("#trace").find("textarea")[0].scrollHeight;
+						}else {
+							$("#trace").find("textarea").append(trace);
+							var scrollTop =  $("#trace").find("textarea")[0].scrollHeight;
+						}
+						if(scrollTop > 10000) {
+							$("#trace").find("textarea").html(trace);
+							scrollTop =  $("#trace").find("textarea")[0].scrollHeight;
+						}
+						$("#trace").find("textarea").scrollTop(scrollTop);
+					}
+				});}
+        	}
+        
+			function one222() {
+				if(oneTrack == 1) {
+					oneTrack = 0;	
+				} else {
+					oneTrack = 1;
+				}
+			}
+			function one333() {
+				if(oneLog == 1) {
+					oneLog = 0;	
+				} else {
+					oneLog = 1;
+				}
+				
+			}
+			
+			function clos222() {
+				if(closeDebug == 1) {
+					closeDebug = 0;	
+				} else {
+					closeDebug = 1;
+				}
+			}
+
+			function clearAll() {
+				var scrollTop =  $("#log").find("textarea")[0].scrollHeight;
+				$("#log").find("textarea").html("");
+				var scrollTop =  $("#log").find("textarea")[0].scrollHeight;
+
+				var scrollTop =  $("#trace").find("textarea")[0].scrollHeight;
+				$("#trace").find("textarea").html("");
+				var scrollTop =  $("#trace").find("textarea")[0].scrollHeight;
+
+			}
+
+			$(function(){
+				closeDebug = 0;
+				oneLog = 0;
+				oneTrack = 0;
+				$("#sendRequest").click(sendRequest);
+				$("#one222").click(one222);
+				$("#one333").click(one333);
+				$("#clos222").click(clos222);
+				$("#clearAll").click(clearAll);
+        		if(window.localStorage.getItem('ApiSecKey'))
+        			$("#secKey").val(window.localStorage.getItem('ApiSecKey'));
+        		if(window.localStorage.getItem('ApiPath'))
+        			$("#apiPath").val(window.localStorage.getItem('ApiPath'));
+        		if(window.localStorage.getItem('ApiArgs'))
+        			$("#apiArgs").val(window.localStorage.getItem('ApiArgs'));
+			});
+
+			function loadList() {
+				var url = window.localStorage.wdogUrl + "/Api/getData/pn/5";
+				$.ajax({
+					type : "get",
+					url  : url,
+					dataType: "jsonp",
+					jsonp: "jsoncallback",
+					success : function(data) {
+						parseData(data);
+					},
+					error: function(data, err){
+						console.log(data);
+					}
+				});}
+			function parseData(data) {
+				var log;
+				var state;
+				var time;
+				var name;
+				var stateInfo;
+				var id;
+				var tmp;
+				var  idds = document.__logidss;
+				var iddsNew = new Array();
+				var iddsOld = new Array();
+				var oldIdds = document.__oldidss;
+				var background;
+
+				if(data[0].id == idds[0] && idds.length != 0) {
+					return;	
+				}
+				for(var key in data) {
+					log = data[key];
+					state = log.extends8;
+					time = log.create_at;
+					name = log.name;
+					stateInfo = state == 0 ? "成功" : "失败";
+					state = state == 0 ? "ok" : "err";
+					if(idds.indexOf(log.id) == -1 && idds.length != 0) {
+						background = "active";
+					}else {
+						background = "none";
+					}
+					id = log.id;
+					if(id) {
+					tmp = tmp + '<tr class="'+state+' '+background+'"><td>['+time+']</td><td>'+name+'</td><td>'+stateInfo+'</td><td><span apiName='+name+' idds='+id+'>alert</span></td><td><a target="_blank" href="'+window.localStorage.wdogUrl+'/Subvert/getinfo/id/'+id+'">href</a></td></tr>';
+					iddsNew[key] = log.id;
+					}
+				}
+				document.__logidss = iddsNew;
+				document.__oldidss = iddsOld;
+
+				$("#logTable").empty();
+				$("#logTable").html(tmp);
+			}
+
+			document.__logidss = new Array();
+			document.__oldidss = new Array();
+
+			function loadApiPath(apiPath) {
+				var apiList = window.localStorage.apiList;
+				if(!apiList) {
+					apiList = new Array(20);
+					window.localStorage.setItem('apiList', apiList);
+				}else{
+					apiList = apiList.split(',');
+				}				
+
+				if(apiPath != null) {
+					if( apiList.indexOf(apiPath) == -1 ) {
+						apiList.unshift(apiPath);
+					}else{
+						apiList.remove(apiPath);
+						apiList.unshift(apiPath);
+					}				
+					window.localStorage.setItem('apiList', apiList);
+				}
+				str = '';
+				var data = [];
+				var apiSelect = $("#apiPath");
+				for(key in apiList) {
+					str2 = apiList[key];
+					if(str2) {
+						if(key == 0) {
+							var f = str2;
+							data[key] = {"id":key,"text":str2,"selected":true}
+						}else {
+							data[key] = {"id":key,"text":str2}
+						}
+					}
+				}
+				
+				apiSelect.combobox({
+					onSelect : function(params) {
+						loadApiData( params.text );
+					}
+				});
+
+				apiSelect.combobox("loadData", data);
+				return f;
+			}
+			
+			function loadApiData(apiPath, apiData) {
+				var dataList = window.localStorage.getItem(apiPath);
+				if(!dataList) {
+					dataList = new Array(20);
+					window.localStorage.setItem(apiPath, dataList);
+				}else{
+					dataList = dataList.split(',');
+				}
+
+				if(apiData != null) {
+					if( dataList.indexOf(apiData) == -1 ) {
+						dataList.unshift(apiData);
+					}else{
+						dataList.remove(apiData);
+						dataList.unshift(apiData);
+					}
+					window.localStorage.setItem(apiPath, dataList);
+				}
+
+				str = '';
+				var data = [];
+				var apiSelect = $("#apiArgs");
+				for(key in dataList) {
+					str2 = dataList[key];
+					if(str2) {
+						if(key == 0) {
+							data[key] = {"id":key,"text":str2,"selected":true}
+						}else {
+							data[key] = {"id":key,"text":str2}
+						}
+					}
+				}
+				apiSelect.combobox("loadData", data);
+			}
+
+
+
+			$(document).ready(function(){
+				// 自动加载数据
+				var f = loadApiPath(null);
+				loadApiData(f, null);
+
+        		var secKey = document.getElementById("secKey").value;
+				var apiPath = $("#selectPath .validatebox-text").val();
+
+				var apiArgs = $("#selectArgs .validatebox-text").val();
+        		
+        		window.localStorage.setItem('ApiSecKey',secKey);
+        		window.localStorage.setItem('ApiPath',apiPath);
+        		window.localStorage.setItem('ApiArgs',apiArgs);
+				urls = ApiConfig.apiHost + ApiConfig.entryPage;
+				var signKey = md5("{}" + secKey + "Com.Tool.FrameLogs.Logs.getWdogUrl");
+				$.ajax(
+					{
+						url : urls,
+						type : "POST",
+						data: {"func":"Com.Tool.FrameLogs.Logs.getWdogUrl", "params":"{}", "signKey":signKey},
+						async: false,
+						success : function(data) {
+							var json = eval( "("+data+")" );
+							if( json.response == 'empty') {
+								alert("subvert配置文件config中未检测到:\rDG_LOCAL_URL(本地wdog服务端地址配置项)\r 配置后可自动开启api调用链路追踪!");
+								window.localStorage.wdogUrl = 0;
+							}else{
+								window.localStorage.wdogUrl = json.response;	
+							}
+						}
+					}
+				);
+
+
+			if(window.localStorage.wdogUrl != 0) {
+				var init = (function(){
+					setInterval(loadList,3000);
+				})();
+
+				$('#logTable').on('click', 'span', this, function() {
+					var idds  = $(this).attr('idds');
+					__name = $(this).attr('apiName');
+					var url = window.localStorage.wdogUrl + "/Api/getDataByid/id/" + idds;
+					$.ajax({
+						type : "get",
+						url  : url,
+						dataType: "jsonp",
+						jsonp: "jsoncallback",
+						success : function(data) {
+							$('#apiData').text(data);
+							$('#apiName').text(__name);
+							$('#mywind').reveal();
+						}
+					});
+					}
+				);
+
+			}
+
+			});
+
+
+		</script>
+        <style type="text/css">
+			input{width: 100%;height: 40px;font-size: 20px;padding-left: 8px;}
+			pre {  
+				white-space: pre-wrap;       /* css-3 */ 
+				white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */ 
+				white-space: -pre-wrap;      /* Opera 4-6 */ 
+				white-space: -o-pre-wrap;    /* Opera 7 */ 
+				word-wrap: break-word;       /* Internet Explorer 5.5+ */ 
+			}
+			#box{width: 100%;margin:0 auto;padding: 25px;height:80%}
+			#sendRequest{width: 88%;height: 50px;font-size: 20px;padding-left: 8px;margin-left:102px;}
+			#tblMain{width: 50%;border: 1px solid gray;padding: 25px;float:left;}
+			#box tr{height: 50px; }
+			#box tr td{left: 50px; }
+			#subTitle{font-size:35px;}
+			#RESPONSE{width: 99%;  min-height: 150px;  border: 1px solid silver;padding: 5px;}
+			.right{float:right;width:50%;}
+			.err{font-size:5px;color:rgba(247, 90, 90, 0.98);margin-left:20px;}
+			.ok{font-size:5px;color:rgba(10, 247, 231, 0.62);margin-left:20px;}
+			.active{background:rgba(80, 82, 82, 0.72)};
+			.none{background:rgba(15, 199, 180, 0.30)}
+			#wdog td{padding-right:20px;text-align:center}
+			#wdog {padding-left:25px}
+			#logTable, tr, td{border-collapse: collapse;}
+			#wdog td span {color:rgba(255, 228, 0, 0.87);cursor:pointer;}
+			a:link { text-decoration: none;color:rgba(255, 228, 0, 0.87)}
+			a:visited {color:rgba(255, 228, 0, 0.87);}
+			.textbox-text{font-size:19px}
+        </style>
+
+</head>
+<body>
+
+<div style="width:50%;" id="wdog">
+<table id='logTable' style="background:rgba(6, 3, 3, 0.84);/*border-bottom-left-radius: 5px;border-bottom-right-radius: 5px;*/">
+</table>
+	
+</div>
+
+<center id="box">
+	<table id="tblMain">
+	<tr>
+	  	<th colspan="2" ><span id="subTitle">Subvert 2.0 Debug Client</span><hr></th>
+	  </tr>
+	<tr>
+	  	<th width="100">调试选项: </th>
+		<td>
+			<input type="checkbox"  id="one222" style="width:20;height:20;"/> <span style="font-size:12px;padding-bottom=10px">只输出单次调用track</span>
+			<input type="checkbox"  id = "one333" style="width:20;height:20;"/> <span style="font-size:12px;padding-bottom=10px">只输出单次调用log</span>
+			<input type="checkbox"  id = "clos222" style="width:20;height:20;"/> <span style="font-size:12px;padding-bottom=10px">关闭输出信息</span>
+			<input type="button"  id = "clearAll" style="width:100;height:30;font-size:12px" value="清空输出" />
+	  	</td>
+	  </tr>
+	<tr>
+	  	<th width="100">加密密钥: </th>
+		<td>
+			<input class="easyui-textbox" style="width:100%;height:40px;" type="text" name="name" data-options="required:true" id="secKey" value="_#@DU^^&JGK_((*&gjGH"></input>
+	  	</td>
+	  </tr>
+	  
+	  <th>请求路径:</th>
+		<td id="selectPath">
+			<select class="easyui-combobox" name="apiPath" style="width:100%;height:40px;" id ="apiPath" data-options="valueField:'id',textField:'text'">
+			</select>
+	  	</td>
+	  </tr>
+	  
+	  <th>JSON参数:  </th>
+		<td id="selectArgs">
+			<select class="easyui-combobox" name="state" style="width:100%;height:40px;" id ="apiArgs" data-options="valueField:'id',textField:'text'">
+			</select>
+	  	</td>
+	  </tr>
+	  
+	   <tr>
+			<td colspan="2">
+				<a href="javascript:void(0)" id="sendRequest" style="color:black;font-size:20px;line-height:44px" class="easyui-linkbutton" >确认并发送请求</a>
+		   	</td>
+	   </tr>
+	
+	  <th valign="top">返回结果:   </th>
+		<td>
+	  		<pre id="RESPONSE" ></pre>
+	  	</td>
+	  </tr>
+	  
+  </table>
+  <div class = "right">
+	  <div id= "log" style="height:267;width:600px;margin:auto auto 3px 20px;background:#ABABAB;border-style:inset">
+		  <textarea rows="3" cols="20" style="width:100%;height:100%;color:red" disabled="disabled"></textarea>
+	  </div>
+	  <div id= "trace" style="height:267;width:600px;margin:auto auto 3px 20px;background:#ABABAB;border-style:inset">
+		  <textarea rows="3" cols="20" style="width:100%;height:100%" disabled="disabled"></textarea>
+	  </div>
+  </div>
+
+</center>
+
+<div id="mywind" class="reveal-modal">
+	<h3 id="apiName"></h3><pre id="apiData" style="height:500px;overflow:auto;"></pre>
+	<a class="close-reveal-modal">&#215;</a>
+</div>
+
+
+
+
+</body>
+
+<script type="text/javascript" src="wind/jquery.reveal.js"></script>
+</html>

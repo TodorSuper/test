@@ -1,0 +1,129 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: lenovo
+ * Date: 2015/9/8
+ * Time: 15:09
+ */
+
+namespace Base\FcModule\Detail;
+
+use System\Base;
+
+class Order extends Base{
+    public function __construct() {
+        parent::__construct();
+    }
+
+
+    /**
+     * Base.FcModule.Detail.Order.orderList
+     *  交易流水
+     * @param array $data
+     */
+    public function orderList($data){
+
+        $this->_rule = array(
+            array('sc_code', 'require', PARAMS_ERROR, MUST_CHECK),            #  账户编码				* 必须字段
+            array('page', 'require', PARAMS_ERROR, ISSET_CHECK),            #  页码				非必须参数, 默认值 1
+            array('page_number', 'require', PARAMS_ERROR, ISSET_CHECK),    #  每页行数			非必须参数, 默认值 20
+            array('start_time', 'require', PARAMS_ERROR, ISSET_CHECK),        #  开始时间			非必须参数, 默认值 所有
+            array('end_time', 'require', PARAMS_ERROR, ISSET_CHECK),        #  结束时间			非必须参数, 默认值 所有
+            array('type', 'require', PARAMS_ERROR, ISSET_CHECK),            #  交易类型			非必须参数, 默认值 所有
+        );
+
+        if (!$this->checkInput($this->_rule, $data)) # 自动校验
+            return $this->res($this->getErrorField(), $this->getCheckError());
+
+        # 生成where条件
+		!empty($data['oc_code']) && $where['tci.oc_code'] = $data['oc_code'];
+        !empty($data['b2b_code'])&& $where['tci.b2b_code'] = $data['b2b_code'];
+        isset($data['pay_time'])? $where['tci.pay_time'] = $data['pay_time']:null;
+        isset($data['name'])? $where['sc.name'] = $data['name']:null;
+        $where['tci.pay_status'] = OC_ORDER_PAY_STATUS_PAY;//已支付
+        isset($data['pay_method'])?$where['tci.pay_method'] = $data['pay_method']:$where['tci.pay_method'] =   array('in',array(PAY_METHOD_ONLINE_WEIXIN,PAY_METHOD_ONLINE_ALIPAY,PAY_METHOD_ONLINE_CHINAPAY,PAY_METHOD_ONLINE_REMIT));
+		$where['tci.sc_code'] =  $data['sc_code'];
+		$where['foc.f_status'] = array('in', $data['f_status']);
+        # 默认值
+        $page = isset($data['page']) ? $data['page'] : 1;
+        $pageNumber = isset($data['page_number']) ? $data['page_number'] : 20;
+        # commonView
+        $aggre = array(
+            array('sum','tci.real_amount','total_amount'),
+        );
+        $params['aggre'] = $aggre;
+        $apiPath = "Com.Common.CommonView.Lists.Lists";
+        $params['center_flag'] = SQL_FC;
+        $params['sql_flag'] = 'getFcOrderList';
+        $params['where'] = $where;
+        $params['page'] = $page;
+        $params['order'] = "tci.pay_time desc";
+        $params['page_number'] = $pageNumber;
+        $params['fields'] = 'tci.b2b_code,tci.op_code,tci.client_name,tci.pay_method,tci.uc_code,tci.real_amount,tci.sc_code,tci.order_amout,tci.order_status,tci.pay_status,tci.pay_time,ss.pay_no,ss.oc_code,sc.commercial_name as name';
+        $res = $this->invoke($apiPath, $params);
+        return $this->res($res['response'], $res['status']);
+    }
+    
+    /**
+     * Base.FcModule.Detail.Order.orderAmount
+     *  交易流水未转出订单总额
+     * @param array $data
+     */
+    public function orderAmount($data){
+
+        $this->_rule = array(
+            array('sc_code', 'require', PARAMS_ERROR, MUST_CHECK),            #  账户编码				* 必须字段
+        );
+        // 自动校验
+        if (!$this->checkInput($this->_rule, $data)) {
+            return $this->res($this->getErrorField(), $this->getCheckError());
+        }
+
+        !empty($data['sc_code']) && $where['tci.sc_code'] = $data['sc_code'];
+        !empty($data['oc_code']) && $where['tci.oc_code'] = $data['oc_code'];
+        !empty($data['b2b_code'])&& $where['tci.b2b_code'] = $data['b2b_code'];
+        isset($data['pay_time'])? $where['tci.pay_time'] = $data['pay_time']:null;
+
+        $where['tci.pay_status'] = OC_ORDER_PAY_STATUS_PAY;//已支付
+        $where['foc.f_status'] = array('in', $data['f_status']);
+        isset($data['pay_method'])?$where['tci.pay_method'] = $data['pay_method']:$where['tci.pay_method'] =   array('in',array(PAY_METHOD_ONLINE_WEIXIN,PAY_METHOD_ONLINE_ALIPAY,PAY_METHOD_ONLINE_CHINAPAY,PAY_METHOD_ONLINE_REMIT));
+        # 默认值
+        $fileConfirm = 'sum(tci.order_amout) as price';
+        $apiPath = "Com.Common.CommonView.Lists.Lists";
+        $params['center_flag'] = SQL_FC;
+        $params['sql_flag'] = 'getFcOrderList';
+        $params['where'] = $where;
+        $params['fields'] = $fileConfirm;
+        $params['order'] = "null";
+        $res = $this->invoke($apiPath, $params);
+        return $this->res(($res['response']['lists'][0]));
+
+    }
+
+
+    /**
+     * Base.FcModule.Detail.Order.totalAmount
+     *  交易流水已转出订单总额
+     * @param array $data
+     */
+    public function payMentAmount($params){
+        $where = $params['where'];
+        $this->_rule = array(
+            array('sc_code', 'require', PARAMS_ERROR, MUST_CHECK),           //  账户编码			* 必须字段
+        );
+        // 自动校验
+        if (!$this->checkInput($this->_rule, $where)) {
+            return $this->res($this->getErrorField(), $this->getCheckError());
+        }
+        $lists = D('FcOrderPayment')->where($where)->sum('amount');
+
+        return $this->res(array('total_amount'=>$lists));
+    }
+
+
+
+
+
+}
+
+?>

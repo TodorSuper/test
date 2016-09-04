@@ -1,0 +1,45 @@
+<?php
+
+/**
+ * +---------------------------------------------------------------------
+ * | www.yunputong.com 粮人网
+ * +---------------------------------------------------------------------
+ * | Copyright (c) 2015 http://www.yunputong.com  All rights reserved.
+ * +---------------------------------------------------------------------
+ * | Author: wangguangjian <wangguangjian@liangrenwang.com >
+ * +---------------------------------------------------------------------
+ * | 财务订单相关状态转换
+ */
+
+namespace Base\FcModule\Payment;
+
+use System\Base;
+
+
+class Status extends Base
+{
+    //订单类型
+    public function getConfirmStatus ($confirm_status) {
+        $confirm_lists = array(
+            FC_ORDER_CONFIRM_OC_TYPE_GOODS => '商品订单',
+            FC_ORDER_CONFIRM_OC_TYPE_ADVANCE => '预付款充值订单',
+        );
+        if (!empty($confirm_status)) {
+            return $confirm_lists[$confirm_status];
+        }
+        return $confirm_lists;
+    }
+
+    //订单状态
+    public function getOrderStatus ($orderStatus) {
+        $status_lists = array(
+            'status_'.FC_STATUS_ON_CONFIRM => "已点单",
+            'status_'.FC_STATUS_CONFIRM => "已审单",
+            'pay_status_'.FC_STATUS_ON_PAYMENT => "已制单",
+            'pay_status_'.FC_STATUS_PAYMENT => "已付款",
+        );
+
+        return $status_lists;
+    }
+
+}

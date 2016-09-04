@@ -1,0 +1,434 @@
+<?php
+/**
+ * +---------------------------------------------------------------------
+ * | www.liangrenwang.com 粮人网
+ * +---------------------------------------------------------------------
+ * | Copyright (c) 2015 http://www.liangrenwang.com  All rights reserved.
+ * +---------------------------------------------------------------------
+ * | Author: Todor <nielei@liangrenwang.com >
+ * +---------------------------------------------------------------------
+ * | b2b订单列状态更新
+ */
+
+namespace Base\OrderModule\B2b;
+
+use System\Base;
+
+class Statistics extends Base {
+
+    private $_rule  =   null;
+
+    public function __construct() {
+        parent::__construct();
+    }
+
+
+    /**
+     * @api  Boss版首页统计接口
+     * @apiVersion 1.0.1
+     * @apiName Base.OrderModule.B2b.Statistics.all
+     * @apiTransaction N
+     * @apiAuthor Todor <nielei@liangrenwang.com>
+     * @apiDate 2015-10-20
+     * @apiParam {String} [sc_code] 我是商铺编码,我规定参数必填且类型为String类型
+     */
+
+    public function all($params){
+
+        $this->_rule = array(
+            array('sc_code', 'require', PARAMS_ERROR, MUST_CHECK),       //店铺编码
+            array('start_time', 'require', PARAMS_ERROR, MUST_CHECK),    //开始时间
+            array('end_time', 'require', PARAMS_ERROR, MUST_CHECK),      //结束时间
+        );
+        if (!$this->checkInput($this->_rule, $params)) {
+            return $this->res($this->getErrorField(), $this->getCheckError());
+        }
+        $sc_code     =  $params['sc_code'];
+        $start_time  =  $params['start_time'];
+        $end_time    =  $params['end_time'];
+
+        $where['sc_code'] = $params['sc_code'];
+
+        // 订单金额条件
+        $status_where  = array();
+        //在线支付(微信，支付宝，预付款)已支付
+        $status_where[] = array('pay_type'=>PAY_TYPE_ONLINE,'pay_status'=>OC_ORDER_PAY_STATUS_PAY,'create_time'=>array('between',array($start_time,$end_time)));
+        // 货到付款与账期
+        $status_where[] = array('pay_type'=>array('in',array(PAY_TYPE_COD,PAY_TYPE_TERM)),'ship_status'=>array('in',array(OC_ORDER_SHIP_STATUS_SHIPPED,OC_ORDER_SHIP_STATUS_TAKEOVER)),'ship_time'=>array('between',array($start_time,$end_time)));
+        $status_where['_logic'] = 'or';
+        $where['_complex'] = $status_where;
+        $total_real_amount = D('OcB2bOrder')->field('sum(real_amount) as total_real_amount,count(*) as total_order_num')->where($where)->find();
+        if($total_real_amount === FALSE){
+            return $this->res(NULL,6046);
+        }
+        $total_real_amount['total_real_amount'] = empty($total_real_amount['total_real_amount']) ? 0 : $total_real_amount['total_real_amount'];
+        return $this->res($total_real_amount);
+
+    }
+
+
+
+    /**
+     * @api  Boss版月度统计
+     * @apiVersion 1.0.0
+     * @apiName Base.OrderModule.B2b.Statistics.oldmonth
+     * @apiTransaction N
+     * @apiAuthor Todor <nielei@liangrenwang.com>
+     * @apiDate 2015-10-20
+     * @apiSampleRequest On
+     */
+
+    public function oldmonth($params){
+        $this->_rule = array(
+            array('sc_code', 'require', PARAMS_ERROR, MUST_CHECK),     # 店铺编码  
+            array('year', 'require', PARAMS_ERROR, MUST_CHECK),        # 年
+            array('month', 'require', PARAMS_ERROR, MUST_CHECK),       # 月份
+        );
+        if (!$this->checkInput($this->_rule, $params)) {
+            return $this->res($this->getErrorField(), $this->getCheckError());
+        }
+
+        // 时间设置
+        $start_time = mktime(0,0,0,$params['month'],1,$params['year']);
+        $end_time   = mktime(23,59,59,$params['month']+1,0,$params['year']);
+
+
+        $where['sc_code'] = $params['sc_code'];
+        $status_where  = array();
+        //在线支付(微信，支付宝，预付款)已支付
+        $status_where[] = array('pay_type'=>PAY_TYPE_ONLINE,'pay_status'=>OC_ORDER_PAY_STATUS_PAY,'create_time'=>array('between',array($start_time,$end_time)));
+        // 货到付款与账期
+        $status_where[] = array('pay_type'=>array('in',array(PAY_TYPE_COD,PAY_TYPE_TERM)),'ship_status'=>array('in',array(OC_ORDER_SHIP_STATUS_SHIPPED,OC_ORDER_SHIP_STATUS_TAKEOVER)),'ship_time'=>array('between',array($start_time,$end_time)));
+        $status_where['_logic'] = 'or';
+
+        $where['_complex'] = $status_where;
+        $field = "sum(real_amount) as amount";
+
+        $amount = D('OcB2bOrder')->field($field)->where($where)->select();
+
+        if($amount === FALSE){
+            return $this->res(NULL,6047);
+        }
+
+
+        // 订单数
+        $map['create_time'] = array('between',array($start_time,$end_time));
+        $map['sc_code']     = $params['sc_code'];
+        $orders = D('OcB2bOrder')->field("count(*) as orders")->where($map)->select();
+
+        if($orders === FALSE){
+            return $this->res(NULL,6050);
+        }
+        $temp = app_change_price($amount[0]['amount']);
+
+        $res = array(
+            'amount'=>empty($temp['amount']) ? 0 : $temp['amount'],
+            'orders'=>(int)$orders[0]['orders'],
+            'unit'  =>$temp['unit'],
+        );
+
+        return $this->res($res);
+
+    }
+
+
+    /*
+   * path  : Base.OrderModule.B2b.Statistics.month
+   * fixed : 2015-12-1 added  oldmonth change Form
+   * author: heweijun@liangrenwang.com
+   * desc  : 获取相应年份的每个月的销售额与订单数
+   */
+    public function month($params){
+        $this->_rule = array(
+            array('sc_code', 'require', PARAMS_ERROR, MUST_CHECK),     # 店铺编码
+            array('year', 'require', PARAMS_ERROR, MUST_CHECK),        # 年
+            array('sort', 'require', PARAMS_ERROR, ISSET_CHECK),       # 排序
+        );
+        if (!$this->checkInput($this->_rule, $params)) {
+            return $this->res($this->getErrorField(), $this->getCheckError());
+        }
+
+        //制取排序的方式  MONTH_DESC/MONTH_ASC
+        $sort = !empty($params['sort']) ? explode('_', $params['sort'])[1] : 'DESC';
+        $year = !empty($params['year']) ? $params['year'] : data("Y",time());
+        $sc_code = !empty($params['sc_code'])? $params['sc_code'] : '';
+
+        $sql = "SELECT sum(real_amount) as amount,count(*) as orders,CASE  WHEN  pay_type = 'ONLINE' THEN from_unixtime(create_time, '%m') ELSE from_unixtime(ship_time,'%m') END AS month FROM `16860_oc_b2b_order`
+                WHERE ( `sc_code` = '{$sc_code}' ) AND (  (  ( `pay_type` = 'ONLINE' )  AND ( `pay_status` = 'PAY' ) AND (  (from_unixtime(create_time,'%Y') = {$year}) ) )
+                OR (  ( `pay_type` IN ('COD','TERM') ) AND ( `ship_status` IN ('SHIPPED','TAKEOVER') ) AND (  (from_unixtime(ship_time,'%Y') = {$year} ) ) ) )
+                GROUP BY month ORDER BY month {$sort}";
+
+        $ocB2bOrderD =  D('OcB2bOrder');
+        $orders =  $ocB2bOrderD->query($sql);
+        foreach($orders as $key=>$val){
+            $temp = array();
+            $temp = app_change_price($val['amount']);
+            //去掉unit 为空的
+            $temp = array_filter(array(
+                'year'  => $year,
+                'month' => (int)$val['month'],
+                'amount'=> empty($temp['amount']) ? 0 : $temp['amount'],
+                'unit'  => empty($temp['unit']) ? '' : $temp['unit'],
+                'orders'=>(int)$val['orders'],
+            ));
+            $res['order_data'][] = $temp;
+
+        }
+
+        $status_where  =  $where = array();
+        $status_where[] = array('pay_type'=>PAY_TYPE_ONLINE,'pay_status'=>OC_ORDER_PAY_STATUS_PAY);
+        // 货到付款与账期
+        $status_where[] = array('pay_type'=>array('in',array(PAY_TYPE_COD,PAY_TYPE_TERM)),'ship_status'=>array('in',array(OC_ORDER_SHIP_STATUS_SHIPPED,OC_ORDER_SHIP_STATUS_TAKEOVER)));
+        $status_where['_logic'] = 'or';
+        $where['sc_code']  = $params['sc_code'];
+        $where['_complex'] = $status_where;
+        $field = 'create_time as start_data';
+        $start_data = $ocB2bOrderD->field($field)->where($where)->find();
+        $start_data = $start_data['start_data'];
+        $res['start_data']= $start_data;
+
+        return $this->res($res);
+    }
+
+
+    /**
+     * @api  Boss版热销商品统计
+     * @apiVersion 1.0.0
+     * @apiName Base.OrderModule.B2b.Statistics.hot
+     * @apiTransaction N
+     * @apiAuthor Todor <nielei@liangrenwang.com>
+     * @apiDate 2015-10-21
+     * @apiSampleRequest On
+     */
+
+    public function hot($params){
+        $this->_rule = array(
+            array('sc_code', 'require', PARAMS_ERROR, MUST_CHECK),     # 店铺编码  
+            array('year', 'require', PARAMS_ERROR, MUST_CHECK),        # 年
+            array('month', 'require', PARAMS_ERROR, MUST_CHECK),       # 月
+            array('sort', 'require', PARAMS_ERROR, HAVEING_CHECK),     # 销量
+            array('number', 'require', PARAMS_ERROR, HAVEING_CHECK),   # 取多少
+        );
+        if (!$this->checkInput($this->_rule, $params)) {
+            return $this->res($this->getErrorField(), $this->getCheckError());
+        }
+
+        $year = $params['year'];
+        $month = $params['month'];
+        $number = empty($params['number']) ? 10 : $params['number'];
+
+        // 统计销售量 商品名 规格
+        $field = "SUM(obog.goods_number) as num,obog.goods_name,obog.spec,obog.sic_code";
+        $order =  (empty($params['sort']) || $params['sort'] == "ORDERS_DESC") ? 'num desc' : 'num asc';
+        $map['obog.sc_code'] = $params['sc_code'];
+        $map['obo.ship_status'] = array('in',array(OC_ORDER_SHIP_STATUS_SHIPPED,OC_ORDER_SHIP_STATUS_TAKEOVER));
+        $res = D('OcB2bOrderGoods')->alias('obog')->field($field)
+            ->join("{$this->tablePrefix}oc_b2b_order obo ON obog.b2b_code = obo.b2b_code", 'LEFT')
+            ->where($map)
+            ->where("from_unixtime(obo.create_time,'%Y') = $year and from_unixtime(obo.create_time,'%c') = $month")
+            ->group('obog.sic_code')
+            ->limit($number)
+            ->order($order)
+            ->select();
+
+        // 时间设置
+        $start_time = mktime(0,0,0,$params['month'],1,$params['year']);
+        $end_time   = mktime(23,59,59,$params['month']+1,0,$params['year']);
+
+        // 统计线上销售额
+        $field = "SUM(obog.goods_number*obog.goods_price) as amount,sic_code";
+        $where['obog.sc_code'] = $params['sc_code'];
+
+        $status_where  = array();
+        //在线支付(微信，支付宝，预付款)已支付
+        $status_where[] = array('obo.pay_type'=>PAY_TYPE_ONLINE,'obo.pay_status'=>OC_ORDER_PAY_STATUS_PAY,'obo.create_time'=>array('between',array($start_time,$end_time)));
+        // 货到付款与账期
+        $status_where[] = array('obo.pay_type'=>array('in',array(PAY_TYPE_COD,PAY_TYPE_TERM)),'obo.ship_status'=>array('in',array(OC_ORDER_SHIP_STATUS_SHIPPED,OC_ORDER_SHIP_STATUS_TAKEOVER)),'obo.ship_time'=>array('between',array($start_time,$end_time)));
+        $status_where['_logic'] = 'or';
+
+        $where['_complex'] = $status_where;
+
+        $amount = D('OcB2bOrderGoods')->alias('obog')->field($field)
+            ->join("{$this->tablePrefix}oc_b2b_order obo ON obog.b2b_code = obo.b2b_code", 'LEFT')
+            ->where($where)
+            ->group('obog.sic_code')
+            ->select();
+
+        // 重组数组
+        $res = $this->recombination($res,$amount,'sic_code','amount');
+
+        // 数量相同 以总钱数排序
+        $num = array_column($res,'num');
+        $amount = array_column($res,'amount');
+        array_multisort($num,SORT_NUMERIC,SORT_DESC,$amount,SORT_NUMERIC,SORT_DESC,$res);
+        $items['item_data'] = $res;
+        return $this->res($items);
+    }
+
+
+
+    /**
+     * @api  Boss版客户统计
+     * @apiVersion 1.0.0
+     * @apiName Base.OrderModule.B2b.Statistics.customer
+     * @apiTransaction N
+     * @apiAuthor Todor <nielei@liangrenwang.com>
+     * @apiDate 2015-10-21
+     * @apiSampleRequest On
+     */
+
+    public function customer($params){
+
+        $this->_rule = array(
+            array('sc_code', 'require', PARAMS_ERROR, MUST_CHECK),     # 店铺编码  
+            array('year', 'require', PARAMS_ERROR, MUST_CHECK),        # 年
+            array('month', 'require', PARAMS_ERROR, MUST_CHECK),       # 月
+            array('sort', 'require', PARAMS_ERROR, HAVEING_CHECK),     # 销量
+            array('pageNumber', 'require', PARAMS_ERROR, HAVEING_CHECK),   # 当前页
+            array('pageSize', 'require', PARAMS_ERROR, HAVEING_CHECK),     # 分页数
+        );
+        if (!$this->checkInput($this->_rule, $params)) {
+            return $this->res($this->getErrorField(), $this->getCheckError());
+        }
+
+        $fields = "um.commercial_name,um.name as relate_name,sum(obo.real_amount) as amount,uc.uc_code";
+        $order  = (empty($params['sort']) || $params['sort'] == "AMOUNT_DESC") ? 'amount desc' : 'amount asc' ;
+        $group  = "uc.uc_code";
+
+        // 时间限制
+        $start_time = mktime(0,0,0,$params['month'],1,$params['year']);
+        $end_time   = mktime(0,0,0,$params['month']+1,1,$params['year'])-1;
+        $where['uc.sc_code'] = $params['sc_code'];
+        $status_where  = array();
+
+        //在线支付(微信，支付宝，预付款)已支付
+        $status_where[] = array('obo.pay_type'=>PAY_TYPE_ONLINE,'obo.pay_status'=>OC_ORDER_PAY_STATUS_PAY,'obo.create_time'=>array('between',array($start_time,$end_time)));
+        // 货到付款与账期
+        $status_where[] = array('obo.pay_type'=>array('in',array(PAY_TYPE_COD,PAY_TYPE_TERM)),'obo.ship_status'=>array('in',array(OC_ORDER_SHIP_STATUS_SHIPPED,OC_ORDER_SHIP_STATUS_TAKEOVER)),'obo.pay_time'=>array('between',array($start_time,$end_time)));
+        $status_where['_logic'] = 'or';
+        $where['_complex'] = $status_where;
+
+        $params['page']        = $params['pageNumber'];
+        $params['page_number'] = $params['pageSize'];
+        $params['fields']      = $fields;
+        $params['where']       = $where;
+        $params['order']       = $order;
+        $params['group']       = $group;
+        $params['center_flag'] = SQL_OC;
+        $params['sql_flag']    = 'order_customer_list';
+
+        $apiPath = "Com.Common.CommonView.Lists.Lists";
+        $customers = $this->invoke($apiPath,$params);
+
+        if ($customers['status'] != 0) {
+            return $this->res(NULL,6049);
+        }
+
+        // 获取订单数
+        foreach ($customers['response']['lists'] as $k => $v) {
+            $map['uc_code'] = $v['uc_code'];
+            $map['sc_code'] = $params['sc_code'];
+            $map['create_time'] = array('between',array($start_time,$end_time));
+            $orders = D('OcB2bOrder')->field('count(*) as orders')->where($map)->group('uc_code')->find();
+            $customers['response']['lists'][$k]['amount'] = $v['amount'] < 100000000 ? number_format($v['amount'],2) : "9999,9999.99";
+            $customers['response']['lists'][$k]['orders'] = $orders['orders'] < 100000000 ? (empty($orders['orders']) ? 0 : $orders['orders']) : "99999999";
+        }
+        return $this->res($customers['response']);
+
+    }
+
+    /**
+     * @api  Boss版热统计重组拼装数据
+     * @apiVersion 1.0.0
+     * @apiName Base.OrderModule.B2b.Statistics.recombination
+     * @apiTransaction N
+     * @apiAuthor Todor <nielei@liangrenwang.com>
+     * @apiDate 2015-10-21
+     * @apiSampleRequest Off
+     */
+
+    private function recombination($original,$new,$mateWord,$name){
+        foreach ($new as $k => $v) {
+            $new[$v[$mateWord]] = $v;
+            unset($new[$k]);
+        }
+
+        foreach ($original as $k => $v) {
+            $original[$k][$name] = $new[$v[$mateWord]][$name];
+        }
+        return $original;
+    }
+
+    /**
+     * @Desc    : Boss版 获取本天,本周 ,本月的订单数与交易金额
+     * @ApiPath : Base.OrderModule.B2b.Statistics.day
+     * @Date    : 2015-12-1
+     * @Author  : heweijun@liangrenwang.com
+     */
+    public function day($params){
+        $this->_rule = array(
+            array('sc_code', 'require', PARAMS_ERROR, MUST_CHECK),     # 店铺编码
+            array('year',  'require', PARAMS_ERROR, MUST_CHECK),       # 年
+            array('month', 'require', PARAMS_ERROR, MUST_CHECK),    # 当前页
+            array('day',  'require', PARAMS_ERROR, MUST_CHECK),      # 当天
+        );
+        if (!$this->checkInput($this->_rule, $params)) {
+            return $this->res($this->getErrorField(), $this->getCheckError());
+        }
+
+        $sc_code       =  $params['sc_code'];
+        $year          =  $params['year'];
+        $month         =  $params['month'];
+        $day           =  $params['day'];
+
+        $res = array();
+        $timeGroupsArr = getTimeGroups(array('year'=>$year, 'month'=> $month, 'day'=>$day));
+        $ocB2bOrderD = D('OcB2bOrder');
+        foreach($timeGroupsArr as $key=>$val){
+            $start_time    = $val['start_time' ];
+            $end_time      = $val['end_time'];
+            $status_where  =  $where = array();
+
+            //在线支付(微信，支付宝，预付款)已支付
+            $status_where[] = array('pay_type'=>PAY_TYPE_ONLINE,'pay_status'=>OC_ORDER_PAY_STATUS_PAY,'create_time'=>array('between',array($start_time,$end_time)));
+            // 货到付款与账期
+            $status_where[] = array('pay_type'=>array('in',array(PAY_TYPE_COD,PAY_TYPE_TERM)),'ship_status'=>array('in',array(OC_ORDER_SHIP_STATUS_SHIPPED,OC_ORDER_SHIP_STATUS_TAKEOVER)),'ship_time'=>array('between',array($start_time,$end_time)));
+            $status_where['_logic'] = 'or';
+
+            $where['sc_code']  = $params['sc_code'];
+            $where['_complex'] = $status_where;
+            $field = "sum(real_amount) as amount, count(*) as orders";
+            $dayData = $ocB2bOrderD->field($field)->where($where)->select();
+
+            if($dayData === FALSE){
+                return $this->res(NULL,6047);
+            }
+
+            $temp = array();
+            $temp = app_change_price($dayData[0]['amount']);
+
+
+            $res["$key"] = array(
+                'orders'  => empty($dayData[0]['orders']) ? 0 : $dayData[0]['orders'],
+                'amount'  => empty($temp['amount']) ? 0 : $temp['amount'],
+                'unit'    => empty($temp['unit']) ? '' : $temp['unit'],
+            );
+
+        }
+
+        $status_where  =  $where = array();
+        $status_where[] = array('pay_type'=>PAY_TYPE_ONLINE,'pay_status'=>OC_ORDER_PAY_STATUS_PAY);
+        // 货到付款与账期
+        $status_where[] = array('pay_type'=>array('in',array(PAY_TYPE_COD,PAY_TYPE_TERM)),'ship_status'=>array('in',array(OC_ORDER_SHIP_STATUS_SHIPPED,OC_ORDER_SHIP_STATUS_TAKEOVER)));
+        $status_where['_logic'] = 'or';
+
+        $where['sc_code']  = $params['sc_code'];
+        $where['_complex'] = $status_where;
+        $field = 'create_time as start_data';
+        $start_data = $ocB2bOrderD->field($field)->where($where)->find();
+        $start_data = $start_data['start_data'];
+        $res['start_data']= $start_data;
+
+        return $this->res($res);
+    }
+}

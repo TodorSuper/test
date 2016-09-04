@@ -1,0 +1,229 @@
+<head>
+<meta http-equiv=Content-Type content="text/html;charset=utf-8">
+        <title>Server_Api_Call_Client</title>
+        <style type="text/css">
+			input{width: 100%;height: 40px;font-size: 20px;padding-left: 8px;}
+			pre {  
+				white-space: pre-wrap;       /* css-3 */ 
+				white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */ 
+				white-space: -pre-wrap;      /* Opera 4-6 */ 
+				white-space: -o-pre-wrap;    /* Opera 7 */ 
+				word-wrap: break-word;       /* Internet Explorer 5.5+ */ 
+			}
+			#box{width: 100%;margin:0 auto;padding: 25px;height:80%}
+			#sendRequest{width: 89%;height: 50px;font-size: 20px;padding-left: 8px;margin-left:102px;}
+			#tblMain{width: 50%;border: 1px solid gray;padding: 25px;float:left;}
+			tr{height: 50px; }
+			#subTitle{font-size:35px;}
+			#RESPONSE{width: 99%;  min-height: 150px;  border: 1px solid silver;padding: 5px;}
+			.right{float:right;width:50%;}
+        </style>
+        <script type="text/javascript" src="js/md5.min.js"></script>
+        <script type="text/javascript" src="js/JsonUti.js"></script>
+        <script type="text/javascript" src="js/jquery-1.11.1.js"></script>
+        <script type="text/javascript">
+        	var ApiConfig={
+        			'apiHost': 'http://' + window.location.host,
+        			'entryPage': '/index.php'
+        	};
+        
+        	function sendRequest(){
+        		var secKey = document.getElementById("secKey").value;
+        		if(secKey.length<1){
+        			alert("加密密钥输入有误, 请重新输入...");
+        			return false;
+        		}
+        		
+        		var apiPath = document.getElementById("apiPath").value;
+        		if(apiPath.length<5){
+        			alert("请求路径输入有误, 请重新输入...");
+        			return false;
+        		}
+        		
+        		var apiArgs = document.getElementById("apiArgs").value;
+        		if(apiArgs.length<2){
+        			alert("JSON参数输入有误, 请重新输入...");
+        			return false;
+        		}
+        		
+        		window.localStorage.setItem('ApiSecKey',secKey);
+        		window.localStorage.setItem('ApiPath',apiPath);
+        		window.localStorage.setItem('ApiArgs',apiArgs);
+        		
+        		var signKey = md5(apiArgs + secKey + apiPath);
+        		$( "#RESPONSE" ).html( '' );
+               var request = $.ajax({
+               	  url: ApiConfig.apiHost + ApiConfig.entryPage,
+               	  type: "POST",
+				  data: { 'func' : apiPath, 'params': apiArgs, 'signKey': signKey },
+				  async: false,
+               	  //dataType: "json",
+				  success: function( data ) {
+					//$("#log").find("textarea").append("1233333333\n");
+//				      var scrollTop =  $("#log").find("textarea")[0].scrollHeight;
+//					  $("#log").find("textarea").scrollTop(scrollTop);
+               		  try{
+	               		var jsonStr = JsonUti.convertToString( eval( "("+data+")" ) )
+	               		$( "#RESPONSE" ).css("border-color","green").html( jsonStr );  
+               		  }catch(exception){
+	               		$( "#RESPONSE" ).css("border-color","red").html( data );  
+               		  }
+	               	}
+				});
+				signKey = md5("{}" + secKey + "Com.Tool.FrameLogs.Logs.getAll");
+				if(closeDebug == 0) {
+				var request = $.ajax({
+				  url: ApiConfig.apiHost + ApiConfig.entryPage,
+				  type: "POST",
+				  data: { 'func' : "Com.Tool.FrameLogs.Logs.getAll", 'params': '{}', 'signKey': signKey },
+				  //dataType: "json",
+				  success: function( data ) {
+						var json = eval( "("+data+")" );
+						var strs = json.response;
+						var log = strs.log;
+						var trace = strs.trace;
+						if(oneLog == 1) {
+							$("#log").find("textarea").html(log);
+							var scrollTop =  $("#log").find("textarea")[0].scrollHeight;
+						}else {
+							$("#log").find("textarea").append(log);
+							var scrollTop =  $("#log").find("textarea")[0].scrollHeight;
+						}
+
+						if(scrollTop > 10000) {
+							$("#log").find("textarea").html(log);
+							var scrollTop =  $("#log").find("textarea")[0].scrollHeight;
+						}
+
+						$("#log").find("textarea").scrollTop(scrollTop);
+
+						if(oneTrack == 1) {
+							$("#trace").find("textarea").html(trace);
+							var scrollTop =  $("#trace").find("textarea")[0].scrollHeight;
+						}else {
+							$("#trace").find("textarea").append(trace);
+							var scrollTop =  $("#trace").find("textarea")[0].scrollHeight;
+						}
+						if(scrollTop > 10000) {
+							$("#trace").find("textarea").html(trace);
+							scrollTop =  $("#trace").find("textarea")[0].scrollHeight;
+						}
+						$("#trace").find("textarea").scrollTop(scrollTop);
+					}
+				});}
+        	}
+        
+			function one222() {
+				if(oneTrack == 1) {
+					oneTrack = 0;	
+				} else {
+					oneTrack = 1;
+				}
+			}
+			function one333() {
+				if(oneLog == 1) {
+					oneLog = 0;	
+				} else {
+					oneLog = 1;
+				}
+				
+			}
+			
+			function clos222() {
+				if(closeDebug == 1) {
+					closeDebug = 0;	
+				} else {
+					closeDebug = 1;
+				}
+			}
+
+			function clearAll() {
+				var scrollTop =  $("#log").find("textarea")[0].scrollHeight;
+				$("#log").find("textarea").html("");
+				var scrollTop =  $("#log").find("textarea")[0].scrollHeight;
+
+				var scrollTop =  $("#trace").find("textarea")[0].scrollHeight;
+				$("#trace").find("textarea").html("");
+				var scrollTop =  $("#trace").find("textarea")[0].scrollHeight;
+
+			}
+
+			$(function(){
+				closeDebug = 0;
+				oneLog = 0;
+				oneTrack = 0;
+				$("#sendRequest").click(sendRequest);
+				$("#one222").click(one222);
+				$("#one333").click(one333);
+				$("#clos222").click(clos222);
+				$("#clearAll").click(clearAll);
+        		if(window.localStorage.getItem('ApiSecKey'))
+        			$("#secKey").val(window.localStorage.getItem('ApiSecKey'));
+        		if(window.localStorage.getItem('ApiPath'))
+        			$("#apiPath").val(window.localStorage.getItem('ApiPath'));
+        		if(window.localStorage.getItem('ApiArgs'))
+        			$("#apiArgs").val(window.localStorage.getItem('ApiArgs'));
+        	});
+        </script>
+</head>
+<body>
+
+<center id="box">
+	<table id="tblMain">
+	<tr>
+	  	<th colspan="2" ><span id="subTitle">Server Api Call Client</span><hr></th>
+	  </tr>
+	<tr>
+	  	<th width="100">调试选项: </th>
+		<td>
+			<input type="checkbox"  id="one222" style="width:20;height:20;"/> <span style="font-size:12px;padding-bottom=10px">只输出单次调用track</span>
+			<input type="checkbox"  id = "one333" style="width:20;height:20;"/> <span style="font-size:12px;padding-bottom=10px">只输出单次调用log</span>
+			<input type="checkbox"  id = "clos222" style="width:20;height:20;"/> <span style="font-size:12px;padding-bottom=10px">关闭输出信息</span>
+			<input type="button"  id = "clearAll" style="width:100;height:30;font-size:12px" value="清空输出" />
+	  	</td>
+	  </tr>
+	<tr>
+	  	<th width="100">加密密钥: </th>
+	  	<td>
+	  		<input type="text" id="secKey"  value="_#@DU^^&JGK_((*&gjGH"/>
+	  	</td>
+	  </tr>
+	  
+	  <th>请求路径:</th>
+	  	<td>
+	  		<input type="text" id="apiPath"  autoComplete= "On" value="Wap.Address.getAllAddressByUser"/>
+	  	</td>
+	  </tr>
+	  
+	  <th>JSON参数:  </th>
+	  	<td>
+	  		<input type="text" id="apiArgs"  value='{"uid":11}'/>
+	  	</td>
+	  </tr>
+	  
+	   <tr>
+		   	<td colspan="2">
+		   		<input type="button" id="sendRequest" value="确认并发送请求">
+		   	</td>
+	   </tr>
+	
+	  <th valign="top">返回结果:   </th>
+	  	<td>
+	  		<pre id="RESPONSE" ></pre>
+	  	</td>
+	  </tr>
+	  
+  </table>
+  <div class = "right">
+	  <div id= "log" style="height:267;width:600px;margin:auto auto 3px 20px;background:#ABABAB;border-style:inset">
+		  <textarea rows="3" cols="20" style="width:100%;height:100%;color:red" disabled="disabled"></textarea>
+	  </div>
+	  <div id= "trace" style="height:267;width:600px;margin:auto auto 3px 20px;background:#ABABAB;border-style:inset">
+		  <textarea rows="3" cols="20" style="width:100%;height:100%" disabled="disabled"></textarea>
+	  </div>
+  </div>
+
+</center>
+
+</body>
+</html>

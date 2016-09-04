@@ -1,0 +1,42 @@
+<?php
+
+/**
+ * +---------------------------------------------------------------------
+ * | www.yunputong.com 粮人网
+ * +---------------------------------------------------------------------
+ * | Copyright (c) 2015 http://www.yunputong.com  All rights reserved.
+ * +---------------------------------------------------------------------
+ * | Author: zhoulianlei <zhoulianlei@yunputong.com >
+ * +---------------------------------------------------------------------
+ * | b2b注册模块
+ */
+
+namespace Test\Bll\CmsVersion;
+use System\Base;
+
+class Version extends Base {
+
+
+    /**
+     * 补丁添加
+     * Test.Bll.CmsVersion.Version.addPatch
+     */
+    public function addPatch($params){
+        // $apiPath = "Bll.Cms.Version.Version.addPatch";
+        // $apiPath = "Bll.Cms.Version.Version.editPatch";
+        $apiPath = "Bll.Cms.Version.Version.patchLists";
+        // $apiPath = "Bll.Cms.Version.Version.getPatch";
+        $params = array(
+            // 'id'=>'37',
+            // 'patch_version'=>'0000',
+            // 'patch_url'=>'0000',
+            // 'content'=>'000',
+            // 'device'=>'ANDROID',
+            // 'version_ids'=>array('17'),
+            );
+        $res = $this->invoke($apiPath,$params);
+        return $this->endInvoke($res['response']);
+    }
+}
+
+?>

@@ -1,0 +1,144 @@
+<?php
+
+/**
+ * +---------------------------------------------------------------------
+ * | www.yunputong.com 粮人网
+ * +---------------------------------------------------------------------
+ * | Copyright (c) 2015 http://www.yunputong.com  All rights reserved.
+ * +---------------------------------------------------------------------
+ * | Author: zhoulianlei <zhoulianlei@yunputong.com >
+ * +---------------------------------------------------------------------
+ * | pop订单列表相关的操作
+ */
+
+namespace Bll\Pop\Finance;
+
+use System\Base;
+
+class OrderInfo extends Base
+{
+
+    private $_rule = null; # 验证规则列表
+    private static $uc_prefix = null;
+
+    public function __construct()
+    {
+        parent::__construct();
+        self::$uc_prefix = 'Fc';
+    }
+
+    /**
+     *
+     * 财务交易列表
+     * Bll.Pop.Finance.OrderInfo.tradeLists
+     * @param array $params
+     */
+    public function tradeLists($param)
+    {
+       // $param['sc_code'] = '1020000000026';
+        $apiPath = "Base.FcModule.Detail.Order.orderList";
+        $list = $this->invoke($apiPath, $param);
+        //支付方式
+        $apiPath = "Base.OrderModule.B2b.Status.getPayMethod";
+        $model = M($apiPath);
+        $pay_method = $model->getPayMethod();
+        $list['response']['pay_method'] = $pay_method;
+        return $this->endInvoke($list['response']);
+
+    }
+
+    /**
+     * 财务未转账交易列表
+     * Bll.Pop.Finance.OrderInfo.payMentList
+     * @param array $params
+     */
+    public function  payMentList($param)
+    {
+        $apiPath = "Base.FcModule.Payment.Order.findPayment";
+        $list = $this->invoke($apiPath, $param);
+        return $this->endInvoke($list['response']);
+    }
+
+    /**
+     *
+     * pop财务已转账汇总单详情
+     * Bll.Pop.Finance.OrderInfo.payMentDetial
+     * @param array $params
+     */
+    public function payMentDetial($param)
+    {
+        $data = array(
+            'fc_code'=>$param['fc_code'],
+            'sc_code'=>$param['sc_code']
+        );
+        $where['field'] = $param['field'];
+        unset($param['field']);
+        $where['where'] = $param;
+        $pay_ment = D('FcOrderPayment')->where($data)->select();
+		$apiPath = "Base.FcModule.Payment.Order.findConfirm";
+
+		$listWhere = array(
+			'fc_code' => $param['fc_code'],
+			'sc_code' =>$param['sc_code'],
+			'f_status' => 3,
+		);
+        $list_confirm = $this->invoke($apiPath, $listWhere);
+        $list['pay_ment'] = $pay_ment[0];
+        $list['pay_confirm'] = $list_confirm['response']['lists'];
+        //整理payment数据 查询店铺名称
+        foreach($list['pay_confirm'] as $k=>$v){
+            $key[] =$v['oc_code'];
+        }
+        $where = array();
+        if(isset($key)){
+            $where['op_code'] = array('in',$key);
+            $field = array(
+                'op_code',
+                'commercial_name'
+            );
+            $commercial_names = D('OcB2bOrderExtend')->field($field)->where($where)->select();
+            //数组整理
+            foreach($commercial_names as $k=>$v){
+                $names[$v['op_code']] = $v;
+            }
+        }
+        $status = M('Base.OrderModule.B2b.Status.getPayMethod');
+        foreach($list['pay_confirm'] as $k=>$v){
+            $list['pay_confirm'][$k] =$v;
+            $list['pay_confirm'][$k]['pay_method'] =$status->getPayMethod($v['pay_method']);
+            $list['pay_confirm'][$k]['pay_time'] = date('Y-m-d H:i:s',$v['pay_time']);
+            $list['pay_confirm'][$k]['commercial_name'] = $names[$v['oc_code']]['commercial_name'];
+        }
+
+        return $this->endInvoke($list);
+
+    }
+
+    /**
+     *
+     * pop未转账订单总额
+     * Bll.Pop.Finance.OrderInfo.orderAmount
+     * @param array $params
+     */
+    public function orderAmount($param){
+       //$param['sc_code'] = '1020000000026';
+        $apiPath = "Base.FcModule.Detail.Order.orderAmount";
+        $list = $this->invoke($apiPath, $param);
+        return $this->endInvoke($list['response']);
+    }
+
+    /**
+     *
+     * pop已转账订单总额
+     * Base.FcModule.Detail.Order.payMentAmount
+     * @param array $params
+     */
+    public function payMentAmount($param){
+       // $param['sc_code'] = '1020000000026';
+        $apiPath = "Base.FcModule.Detail.Order.payMentAmount";
+        $list = $this->invoke($apiPath, $param);
+        return $this->endInvoke($list['response']);
+    }
+}
+
+?>
